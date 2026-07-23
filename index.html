@@ -3,561 +3,543 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA COMPROMETIDO</title>
+  <title>Contesta y Gana — Premios Digitales 2024</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; background: #0d0d0d; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
-    body {
-      background: #000;
-      font-family: 'Courier New', Courier, monospace;
-      color: #ff0000;
-      min-height: 100vh;
-      overflow-x: hidden;
+    /* ── WELCOME ── */
+    #welcome-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 20px; background: radial-gradient(ellipse at top, #1a1a1a 0%, #0d0d0d 70%);
+      transition: opacity 0.5s ease;
     }
-
-    #rw-root {
-      background: #000;
-      position: relative;
-      overflow: hidden;
-      min-height: 100vh;
+    .w-card {
+      background: #1a1a1a; border-radius: 20px; border: 1px solid #2a2a2a;
+      box-shadow: 0 0 60px rgba(255,120,0,0.12), 0 8px 48px rgba(0,0,0,0.6);
+      padding: 40px 34px 32px; max-width: 460px; width: 100%; text-align: center;
     }
-
-    #mc {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      opacity: 0.13;
-      pointer-events: none;
-      z-index: 0;
+    .w-logo {
+      width: 72px; height: 72px; background: #ff7800; border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; box-shadow: 0 0 24px rgba(255,120,0,0.45);
     }
+    .w-badge {
+      display: inline-block; background: rgba(255,120,0,0.15);
+      border: 1px solid rgba(255,120,0,0.3); color: #ff9a40;
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 14px;
+    }
+    .w-title { font-size: 1.7em; font-weight: 800; color: #fff; margin-bottom: 4px; line-height: 1.2; }
+    .w-title span { color: #ff7800; }
+    .w-sub { font-size: 0.83em; color: #555; margin-bottom: 26px; }
 
+    .prize-strip { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+    .prize-item  { flex: 1; background: #111; border: 1px solid #222; border-radius: 12px; padding: 12px 6px; text-align: center; }
+    .prize-item i      { font-size: 22px; color: #ff7800; display: block; margin-bottom: 5px; }
+    .prize-item p      { font-size: 0.7em; color: #888; line-height: 1.3; }
+    .prize-item strong { color: #ccc; font-size: 0.78em; display: block; }
+
+    .w-box { background: #111; border: 1px solid #222; border-radius: 14px; padding: 18px 20px; margin-bottom: 22px; text-align: left; }
+    .w-box p { color: #aaa; font-size: 0.88em; line-height: 1.7; margin-bottom: 12px; }
+    .w-box p:last-child { margin-bottom: 0; }
+    .w-box strong { color: #ff9a40; }
+    .w-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .w-chip  { display: flex; align-items: center; gap: 5px; font-size: 0.75em; color: #ff9a40; background: rgba(255,120,0,0.1); border: 1px solid rgba(255,120,0,0.2); border-radius: 20px; padding: 4px 10px; }
+
+    .w-btn {
+      width: 100%; background: #ff7800; color: #000; border: none; border-radius: 12px;
+      padding: 16px; font-size: 1em; font-weight: 800; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(255,120,0,0.35);
+    }
+    .w-btn:hover  { background: #ff9000; box-shadow: 0 4px 28px rgba(255,120,0,0.55); }
+    .w-btn:active { transform: scale(0.98); }
+    .w-tc { margin-top: 14px; }
+    .w-tc a { color: #333; font-size: 0.72em; text-decoration: none; transition: color 0.2s; }
+    .w-tc a:hover { color: #555; }
+
+    /* ── MODAL ── */
+    #terms-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      display: none; align-items: center; justify-content: center; z-index: 999; padding: 20px;
+    }
+    #terms-modal.open { display: flex; }
+    .tm-box {
+      background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 18px;
+      padding: 32px 26px; max-width: 390px; width: 100%; text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.8), 0 0 40px rgba(255,120,0,0.1);
+      animation: pop-in 0.28s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes pop-in { from { transform: scale(0.82); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .tm-icon {
+      width: 56px; height: 56px; background: rgba(255,120,0,0.12);
+      border: 1px solid rgba(255,120,0,0.25); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
+    }
+    .tm-title { font-size: 1.05em; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .tm-ver   { font-size: 0.72em; color: #444; margin-bottom: 18px; }
+    .tm-body  { background: #111; border: 1px solid #222; border-radius: 10px; padding: 16px; text-align: left; margin-bottom: 8px; }
+    .tm-body p { font-size: 0.85em; color: #aaa; line-height: 1.7; }
+    .tm-body strong { color: #ff9a40; }
+    .tm-nota {
+      background: rgba(255,120,0,0.08); border: 1px solid rgba(255,120,0,0.3);
+      border-left: 4px solid #ff7800; border-radius: 8px;
+      padding: 12px 14px; margin-top: 12px; text-align: left;
+    }
+    .tm-nota-label { font-size: 0.68em; font-weight: 800; color: #ff7800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+    .tm-nota p { font-size: 0.8em; color: #cc8a00; line-height: 1.6; }
+    .tm-nota strong { color: #ff9a40; }
+    .tm-accept {
+      width: 100%; background: #ff7800; color: #000; border: none; border-radius: 8px;
+      padding: 12px; font-size: 0.9em; font-weight: 800; cursor: pointer;
+      transition: background 0.2s; margin-top: 18px;
+    }
+    .tm-accept:hover { background: #ff9000; }
+
+    /* ── RANSOMWARE ── */
+    #ransomware-screen { display: none; }
+    #mc { position: fixed; top:0; left:0; width:100%; height:100%; opacity:0.13; pointer-events:none; z-index:0; }
     .scanlines {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px
-      );
-      pointer-events: none;
-      z-index: 1;
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);
+      pointer-events: none; z-index: 1;
     }
+    #rw-root { background: #000; position: relative; min-height: 100vh; font-family: 'Courier New', Courier, monospace; color: #ff0000; }
+    .main { position: relative; z-index: 2; max-width: 880px; margin: 0 auto; padding: 28px 18px 48px; }
 
-    .main {
-      position: relative;
-      z-index: 2;
-      max-width: 880px;
-      margin: 0 auto;
-      padding: 28px 18px 48px;
-    }
+    #hdr { text-align:center; padding:32px 20px 24px; border:2px solid #aa0000; border-radius:12px; margin-bottom:22px; background:rgba(255,0,0,0.04); animation:pulse-border 2s infinite; }
+    @keyframes pulse-border { 0%,100%{box-shadow:0 0 12px rgba(180,0,0,0.18);}50%{box-shadow:0 0 35px rgba(200,0,0,0.45);} }
 
-    /* HEADER */
-    #hdr {
-      text-align: center;
-      padding: 32px 20px 24px;
-      border: 2px solid #aa0000;
-      border-radius: 12px;
-      margin-bottom: 22px;
-      background: rgba(255,0,0,0.04);
-      animation: pulse-border 2s infinite;
-    }
-    @keyframes pulse-border {
-      0%,100% { box-shadow: 0 0 12px rgba(180,0,0,0.18); }
-      50%      { box-shadow: 0 0 35px rgba(200,0,0,0.45); }
-    }
+    #gt { font-size:2.2em; font-weight:bold; color:#fff; text-transform:uppercase; letter-spacing:3px; margin-bottom:11px; animation:glitch-skew 4s infinite linear alternate-reverse; }
+    @keyframes glitch-skew { 0%{transform:skew(0deg);}4%{transform:skew(-1deg);color:#ff5555;}8%{transform:skew(.4deg);}92%{transform:skew(0deg);}96%{transform:skew(.8deg);color:#ff7777;}100%{transform:skew(0deg);} }
 
-    .skull-icon { font-size: 3.8em; line-height: 1; margin-bottom: 10px; color: #ff2222; }
+    #bw { color:#ff4444; font-size:1.05em; letter-spacing:1px; animation:blink 1.5s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.25;} }
 
-    #gt {
-      font-size: 2.2em;
-      font-weight: bold;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      margin-bottom: 11px;
-      animation: glitch-skew 4s infinite linear alternate-reverse;
-    }
-    @keyframes glitch-skew {
-      0%   { transform: skew(0deg); }
-      4%   { transform: skew(-1deg); color: #ff5555; }
-      8%   { transform: skew(0.4deg); }
-      92%  { transform: skew(0deg); }
-      96%  { transform: skew(0.8deg); color: #ff7777; }
-      100% { transform: skew(0deg); }
-    }
+    .timer-wrap { text-align:center; background:#080808; border:1px solid #1c1c1c; border-radius:12px; padding:22px; margin-bottom:18px; }
+    .timer-label { color:#555; font-size:0.72em; letter-spacing:4px; text-transform:uppercase; margin-bottom:14px; }
+    .timer-display { display:flex; justify-content:center; align-items:center; gap:8px; }
+    .time-block { background:#0f0f0f; border:1px solid #aa0000; border-radius:8px; padding:12px 16px; min-width:74px; text-align:center; }
+    .time-number { display:block; font-size:2.7em; font-weight:bold; color:#fff; line-height:1; }
+    .time-unit   { display:block; font-size:0.6em; color:#444; letter-spacing:2px; margin-top:3px; }
+    .sep { font-size:2.3em; font-weight:bold; color:#aa0000; padding-bottom:14px; animation:sep-blink 1s step-end infinite; }
+    @keyframes sep-blink { 0%,100%{opacity:1;}50%{opacity:0;} }
 
-    #bw {
-      color: #ff4444;
-      font-size: 1.05em;
-      letter-spacing: 1px;
-      animation: blink 1.5s step-end infinite;
-    }
-    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.25; } }
+    .section-box { background:#080808; border:1px solid #161616; border-radius:12px; padding:20px; margin-bottom:18px; }
+    .section-title { color:#cc2222; font-size:0.78em; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:7px; }
+    .section-title::before { content:''; display:inline-block; width:3px; height:13px; background:#aa0000; border-radius:2px; }
 
-    /* TIMER */
-    .timer-wrap {
-      text-align: center;
-      background: #080808;
-      border: 1px solid #1c1c1c;
-      border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 18px;
-    }
-    .timer-label {
-      color: #555;
-      font-size: 0.72em;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-    .timer-display { display: flex; justify-content: center; align-items: center; gap: 8px; }
-    .time-block {
-      background: #0f0f0f;
-      border: 1px solid #aa0000;
-      border-radius: 8px;
-      padding: 12px 16px;
-      min-width: 74px;
-      text-align: center;
-    }
-    .time-number {
-      display: block;
-      font-size: 2.7em;
-      font-weight: bold;
-      color: #fff;
-      line-height: 1;
-    }
-    .time-unit { display: block; font-size: 0.6em; color: #444; letter-spacing: 2px; margin-top: 3px; }
-    .sep {
-      font-size: 2.3em;
-      font-weight: bold;
-      color: #aa0000;
-      padding-bottom: 14px;
-      animation: sep-blink 1s step-end infinite;
-    }
-    @keyframes sep-blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+    .progress-bar-bg { background:#141414; border-radius:4px; height:7px; margin-bottom:9px; overflow:hidden; }
+    #pb { height:100%; background:#cc0000; border-radius:4px; width:0%; transition:width 0.6s ease; }
+    .progress-meta { display:flex; justify-content:space-between; font-size:0.72em; color:#444; margin-bottom:12px; }
+    .progress-meta span { color:#ff3333; }
 
-    /* ENCRYPTION PROGRESS */
-    .section-box {
-      background: #080808;
-      border: 1px solid #161616;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-    .section-title {
-      color: #cc2222;
-      font-size: 0.78em;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-    .section-title::before {
-      content: '';
-      display: inline-block;
-      width: 3px; height: 13px;
-      background: #aa0000;
-      border-radius: 2px;
-    }
+    .app-row { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid #101010; }
+    .app-row i { font-size:18px; color:#ff6600; min-width:22px; text-align:center; }
+    .app-name   { font-size:0.82em; color:#ff6600; font-weight:bold; }
+    .app-detail { font-size:0.7em; color:#553333; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .app-status { white-space:nowrap; font-size:0.72em; color:#ffaa00; animation:blink 0.35s step-end infinite; margin-left:auto; }
+    .app-row.done i { color:#551111; }
+    .app-row.done .app-name { color:#882222; }
+    .app-row.done .app-status { color:#cc0000; animation:none; }
 
-    .progress-bar-bg {
-      background: #141414;
-      border-radius: 4px;
-      height: 7px;
-      margin-bottom: 9px;
-      overflow: hidden;
-    }
-    #pb {
-      height: 100%;
-      background: #cc0000;
-      border-radius: 4px;
-      width: 0%;
-      transition: width 0.6s ease;
-    }
-    .progress-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.72em;
-      color: #444;
-      margin-bottom: 12px;
-    }
-    .progress-meta span { color: #ff3333; }
+    .payment-wrap { background:#060606; border:1px solid #181818; border-radius:12px; padding:20px; margin-bottom:18px; }
+    .btc-box { text-align:center; background:#0c0c0c; border-radius:8px; padding:18px; margin-bottom:14px; }
+    .btc-amount { font-size:2.6em; font-weight:bold; color:#f7931a; font-family:monospace; }
+    .usd-amount { color:#444; font-size:0.85em; margin-top:4px; }
+    .wallet-box { background:#0e0e0e; border:1px solid #1e1e1e; border-radius:8px; padding:13px; text-align:center; margin-bottom:14px; }
+    .wallet-label { color:#3a3a3a; font-size:0.68em; letter-spacing:2px; margin-bottom:7px; }
+    .wallet-addr  { color:#00bb00; font-family:monospace; font-size:0.82em; word-break:break-all; }
+    .copy-btn { background:transparent; border:1px solid #2a2a2a; color:#444; padding:6px 13px; border-radius:4px; font-family:monospace; font-size:0.72em; margin-top:9px; cursor:pointer; transition:all 0.2s; }
+    .copy-btn:hover { border-color:#00aa00; color:#00aa00; }
 
-    .app-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 0;
-      border-bottom: 1px solid #101010;
-    }
-    .app-row i { font-size: 18px; color: #ff6600; min-width: 22px; text-align: center; }
-    .app-name  { font-size: 0.82em; color: #ff6600; font-weight: bold; }
-    .app-detail{ font-size: 0.7em; color: #553333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .app-status {
-      white-space: nowrap;
-      font-size: 0.72em;
-      color: #ffaa00;
-      animation: blink 0.35s step-end infinite;
-      margin-left: auto;
-    }
-    .app-row.done i { color: #551111; }
-    .app-row.done .app-name { color: #882222; }
-    .app-row.done .app-status { color: #cc0000; animation: none; }
+    #big-warn { border:3px solid #cc0000; border-radius:10px; padding:22px 16px; text-align:center; background:rgba(180,0,0,0.08); animation:warn-pulse 1.8s infinite; }
+    @keyframes warn-pulse { 0%,100%{box-shadow:0 0 10px rgba(180,0,0,0.15);}50%{box-shadow:0 0 32px rgba(220,0,0,0.5);} }
+    .warn-icon { font-size:2.8em; line-height:1; margin-bottom:10px; color:#ff2222; }
+    #wt1 { color:#ff2222; font-size:1.65em; font-weight:bold; text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; line-height:1.2; animation:blink 1s step-end infinite; }
+    .warn-sub  { color:#cc2222; font-size:1em; letter-spacing:1px; margin-bottom:6px; }
+    #wt2 { color:#fff; font-size:1.3em; font-weight:bold; letter-spacing:1px; animation:blink 1.2s step-end infinite; }
+    .warn-note { color:#883333; font-size:0.78em; margin-top:10px; letter-spacing:1px; }
 
-    /* PAYMENT */
-    .payment-wrap {
-      background: #060606;
-      border: 1px solid #181818;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-    .btc-box {
-      text-align: center;
-      background: #0c0c0c;
-      border-radius: 8px;
-      padding: 18px;
-      margin-bottom: 14px;
-    }
-    .btc-amount { font-size: 2.6em; font-weight: bold; color: #f7931a; font-family: monospace; }
-    .usd-amount { color: #444; font-size: 0.85em; margin-top: 4px; }
+    #rvz { text-align:center; margin-bottom:22px; }
+    #rvbtn { background:transparent; border:2px solid #009900; color:#00bb00; padding:13px 38px; font-size:0.95em; font-family:'Courier New',monospace; cursor:pointer; border-radius:6px; letter-spacing:3px; text-transform:uppercase; animation:green-pulse 2.2s infinite; }
+    @keyframes green-pulse { 0%,100%{box-shadow:0 0 8px rgba(0,150,0,0.15);}50%{box-shadow:0 0 22px rgba(0,180,0,0.35);} }
 
-    .wallet-box {
-      background: #0e0e0e;
-      border: 1px solid #1e1e1e;
-      border-radius: 8px;
-      padding: 13px;
-      text-align: center;
-      margin-bottom: 14px;
-    }
-    .wallet-label { color: #3a3a3a; font-size: 0.68em; letter-spacing: 2px; margin-bottom: 7px; }
-    .wallet-addr  { color: #00bb00; font-family: monospace; font-size: 0.82em; word-break: break-all; }
-    .copy-btn {
-      background: transparent;
-      border: 1px solid #2a2a2a;
-      color: #444;
-      padding: 6px 13px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.72em;
-      margin-top: 9px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .copy-btn:hover { border-color: #00aa00; color: #00aa00; }
+    #aw { display:none; background:rgba(0,35,0,0.5); border:2px solid #005500; border-radius:12px; padding:28px; margin-bottom:28px; animation:fade-in 0.9s ease; }
+    @keyframes fade-in { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
+    .aw-title { color:#00cc00; font-size:1.7em; text-align:center; margin-bottom:5px; }
+    .aw-sub   { text-align:center; color:#444; font-size:0.82em; margin-bottom:22px; }
+    .aw-grid  { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+    .aw-card  { background:rgba(0,0,0,0.35); border:1px solid #1a3a1a; border-radius:8px; padding:15px; }
+    .aw-card h4 { color:#00aa00; font-size:0.75em; letter-spacing:2px; margin-bottom:9px; }
+    .aw-card p, .aw-card li { color:#999; font-size:0.8em; line-height:1.6; }
+    .aw-card ul { padding-left:14px; }
+    .aw-tip { background:rgba(0,255,0,0.05); border:1px solid #003300; border-radius:8px; padding:14px; text-align:center; }
+    .aw-tip p { color:#fff; font-size:1em; font-weight:bold; }
 
-    /* BIG WARNING */
-    #big-warn {
-      border: 3px solid #cc0000;
-      border-radius: 10px;
-      padding: 22px 16px;
-      text-align: center;
-      background: rgba(180,0,0,0.08);
-      animation: warn-pulse 1.8s infinite;
-    }
-    @keyframes warn-pulse {
-      0%,100% { box-shadow: 0 0 10px rgba(180,0,0,0.15); }
-      50%      { box-shadow: 0 0 32px rgba(220,0,0,0.5); }
-    }
-    .warn-icon   { font-size: 2.8em; line-height: 1; margin-bottom: 10px; color: #ff2222; }
-    #wt1 {
-      color: #ff2222;
-      font-size: 1.65em;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-      line-height: 1.2;
-      animation: blink 1s step-end infinite;
-    }
-    .warn-sub { color: #cc2222; font-size: 1em; letter-spacing: 1px; margin-bottom: 6px; }
-    #wt2 {
-      color: #fff;
-      font-size: 1.3em;
-      font-weight: bold;
-      letter-spacing: 1px;
-      animation: blink 1.2s step-end infinite;
-    }
-    .warn-note { color: #883333; font-size: 0.78em; margin-top: 10px; letter-spacing: 1px; }
-
-    /* REVEAL BUTTON */
-    #rvz { text-align: center; margin-bottom: 22px; }
-    #rvbtn {
-      background: transparent;
-      border: 2px solid #009900;
-      color: #00bb00;
-      padding: 13px 38px;
-      font-size: 0.95em;
-      font-family: 'Courier New', monospace;
-      cursor: pointer;
-      border-radius: 6px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      animation: green-pulse 2.2s infinite;
-    }
-    @keyframes green-pulse {
-      0%,100% { box-shadow: 0 0 8px rgba(0,150,0,0.15); }
-      50%      { box-shadow: 0 0 22px rgba(0,180,0,0.35); }
-    }
-    #rvbtn:hover { background: rgba(0,180,0,0.08); }
-
-    /* AWARENESS */
-    #aw {
-      display: none;
-      background: rgba(0,35,0,0.5);
-      border: 2px solid #005500;
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 28px;
-      animation: fade-in 0.9s ease;
-    }
-    @keyframes fade-in { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
-    .aw-title { color: #00cc00; font-size: 1.7em; text-align: center; margin-bottom: 5px; }
-    .aw-sub   { text-align: center; color: #444; font-size: 0.82em; margin-bottom: 22px; }
-    .aw-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
-    .aw-card  { background: rgba(0,0,0,0.35); border: 1px solid #1a3a1a; border-radius: 8px; padding: 15px; }
-    .aw-card h4 { color: #00aa00; font-size: 0.75em; letter-spacing: 2px; margin-bottom: 9px; }
-    .aw-card p, .aw-card li { color: #999; font-size: 0.8em; line-height: 1.6; }
-    .aw-card ul { padding-left: 14px; }
-    .aw-tip {
-      background: rgba(0,255,0,0.05);
-      border: 1px solid #003300;
-      border-radius: 8px;
-      padding: 14px;
-      text-align: center;
-    }
-    .aw-tip p { color: #fff; font-size: 1em; font-weight: bold; }
-
-    /* MOBILE */
     @media (max-width: 600px) {
-      #gt   { font-size: 1.5em; letter-spacing: 1px; }
-      .time-number { font-size: 2em; }
-      .time-block  { min-width: 58px; padding: 10px 10px; }
-      .btc-amount  { font-size: 1.9em; }
-      #wt1  { font-size: 1.2em; }
-      #wt2  { font-size: 1em; }
-      .aw-grid { grid-template-columns: 1fr; }
+      .w-card { padding:28px 18px 24px; }
+      .prize-strip { gap:6px; }
+      .prize-item  { padding:10px 4px; }
+      #gt { font-size:1.5em; }
+      .time-number { font-size:2em; }
+      .time-block  { min-width:58px; padding:10px; }
+      .btc-amount  { font-size:1.9em; }
+      #wt1 { font-size:1.2em; }
+      .aw-grid { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
 
-<canvas id="mc"></canvas>
-<div class="scanlines" aria-hidden="true"></div>
+<!-- ══════════════════════════════════
+     PANTALLA DE BIENVENIDA
+═══════════════════════════════════ -->
+<div id="welcome-screen">
+  <div class="w-card">
 
-<div id="rw-root">
-  <div class="main">
-
-    <!-- HEADER -->
-    <div id="hdr">
-      <div class="skull-icon"><i class="ti ti-skull"></i></div>
-      <div id="gt">SISTEMA COMPROMETIDO</div>
-      <p id="bw">&#9888; TODOS TUS DATOS HAN SIDO CIFRADOS &#9888;</p>
+    <div class="w-logo" aria-hidden="true">
+      <i class="ti ti-gift" style="font-size:34px;color:#000;"></i>
     </div>
 
-    <!-- TIMER -->
-    <div class="timer-wrap">
-      <p class="timer-label">Tiempo restante para el pago</p>
-      <div class="timer-display">
-        <div class="time-block">
-          <span class="time-number" id="th">23</span>
-          <span class="time-unit">HORAS</span>
-        </div>
-        <span class="sep">:</span>
-        <div class="time-block">
-          <span class="time-number" id="tm">59</span>
-          <span class="time-unit">MIN</span>
-        </div>
-        <span class="sep">:</span>
-        <div class="time-block">
-          <span class="time-number" id="ts">59</span>
-          <span class="time-unit">SEG</span>
-        </div>
-      </div>
-    </div>
+    <div class="w-badge">🏆 ¿Qué tanto sabes?</div>
 
-    <!-- ENCRYPTION PROGRESS -->
-    <div class="section-box">
-      <p class="section-title">Progreso de cifrado</p>
-      <div class="progress-bar-bg"><div id="pb"></div></div>
-      <div class="progress-meta">
-        <span>Apps comprometidas: <span id="ec">0</span> / 8</span>
-        <span id="ep">0%</span>
-      </div>
-      <div id="fl"></div>
-    </div>
+    <h1 class="w-title">¡Contesta y <span>Gana</span><br>uno de nuestros premios!</h1>
+    <p class="w-sub">Responde el cuestionario y participa al instante</p>
 
-    <!-- PAYMENT -->
-    <div class="payment-wrap">
-      <p class="section-title">Instrucciones de pago</p>
-      <div class="btc-box">
-        <div class="btc-amount">&#x20BF; 0.1 BTC</div>
-        <div class="usd-amount">&#8776; $7,500 USD</div>
+    <div class="prize-strip">
+      <div class="prize-item">
+        <i class="ti ti-device-mobile" aria-hidden="true"></i>
+        <strong>Smartphone</strong>
+        <p>Último modelo</p>
       </div>
-      <div class="wallet-box">
-        <p class="wallet-label">DIRECCIÓN DE BITCOIN</p>
-        <p class="wallet-addr">bc1qx7h3s98n2j4k5p6m7r8t9v0w1x2y3z</p>
-        <button class="copy-btn" id="cpbtn" onclick="doCopy()">
-          <i class="ti ti-copy" style="font-size:12px;vertical-align:-1px;"></i> COPIAR DIRECCIÓN
-        </button>
+      <div class="prize-item">
+        <i class="ti ti-cash" aria-hidden="true"></i>
+        <strong>$5,000 MXN</strong>
+        <p>En efectivo</p>
       </div>
-
-      <!-- BIG WARNING -->
-      <div id="big-warn">
-        <div class="warn-icon"><i class="ti ti-alert-octagon"></i></div>
-        <p id="wt1">NO APAGUES EL EQUIPO</p>
-        <p class="warn-sub">Si apagas o reinicias este dispositivo,</p>
-        <p id="wt2">LA CLAVE SE DESTRUIRÁ PERMANENTEMENTE</p>
-        <p class="warn-note">Tus datos NO podrán ser recuperados bajo ninguna circunstancia</p>
+      <div class="prize-item">
+        <i class="ti ti-brand-amazon" aria-hidden="true"></i>
+        <strong>Gift Card</strong>
+        <p>$2,000 MXN</p>
       </div>
     </div>
 
-    <!-- REVEAL BUTTON -->
-    <div id="rvz">
-      <button id="rvbtn" onclick="doReveal()">
-        <i class="ti ti-shield-check" style="font-size:17px;vertical-align:-3px;"></i> REVELAR VERDAD
-      </button>
+    <div class="w-box">
+      <p>¡Hola! Como parte de nuestro panel de usuarios especiales, queremos conocer tu opinión y <strong>premiarte por tu tiempo.</strong></p>
+      <p>Solo responde <strong>5 preguntas rápidas</strong> sobre tu experiencia digital y automáticamente entrarás al sorteo de hoy. Los ganadores son notificados al instante.</p>
+      <div class="w-chips">
+        <span class="w-chip"><i class="ti ti-clock" style="font-size:13px;"></i> Solo 2 minutos</span>
+        <span class="w-chip"><i class="ti ti-lock" style="font-size:13px;"></i> 100% seguro</span>
+        <span class="w-chip"><i class="ti ti-trophy" style="font-size:13px;"></i> Premio garantizado</span>
+      </div>
     </div>
 
-    <!-- AWARENESS -->
-    <div id="aw">
-      <h2 class="aw-title"><i class="ti ti-shield" style="font-size:22px;vertical-align:-3px;"></i> ¡ALTO! Esto es una simulación</h2>
-      <p class="aw-sub">Acabas de experimentar un ejercicio de concientización en ciberseguridad</p>
-      <div class="aw-grid">
-        <div class="aw-card">
-          <h4><i class="ti ti-info-circle" style="vertical-align:-2px;"></i> QUÉ ES EL RANSOMWARE</h4>
-          <p>Malware que cifra tus archivos y exige pago en criptomonedas. Es uno de los ataques más costosos para empresas y personas.</p>
-        </div>
-        <div class="aw-card">
-          <h4><i class="ti ti-qrcode" style="vertical-align:-2px;"></i> VECTOR DE ATAQUE</h4>
-          <p>Escaneaste un QR de procedencia desconocida. Es el <strong style="color:#fff;">vector #1</strong> de infección por ingeniería social.</p>
-        </div>
-        <div class="aw-card">
-          <h4><i class="ti ti-eye" style="vertical-align:-2px;"></i> LO QUE OBTENDRÍA UN ATACANTE</h4>
-          <ul>
-            <li>Ubicación geográfica aproximada</li>
-            <li>Modelo de dispositivo y sistema operativo</li>
-            <li>Dirección IP y proveedor de internet</li>
-            <li>Instalar malware silencioso en tu equipo</li>
-          </ul>
-        </div>
-        <div class="aw-card">
-          <h4><i class="ti ti-lock" style="vertical-align:-2px;"></i> CÓMO PROTEGERTE</h4>
-          <ul>
-            <li>Verifica siempre el origen del código QR</li>
-            <li>Usa un lector que muestre la URL antes de abrir</li>
-            <li>Mantén backups actualizados y desconectados</li>
-            <li>Nunca pagues — no garantiza recuperar tus datos</li>
-          </ul>
-        </div>
-      </div>
-      <div class="aw-tip">
-        <p><i class="ti ti-key" style="font-size:17px;vertical-align:-3px;color:#00cc00;"></i> Regla de oro: No confíes en QR que no puedas verificar</p>
-      </div>
+    <button class="w-btn" onclick="goToRansomware()">
+      <i class="ti ti-arrow-right" style="font-size:18px;"></i>
+      ¡Quiero participar ahora!
+    </button>
+
+    <div class="w-tc">
+      <a href="#" onclick="showTerms(event)">términos y condiciones</a>
     </div>
 
   </div>
 </div>
 
+
+<!-- ══════════════════════════════════
+     MODAL TÉRMINOS Y CONDICIONES
+═══════════════════════════════════ -->
+<div id="terms-modal" onclick="closeTermsOverlay(event)">
+  <div class="tm-box" onclick="event.stopPropagation()">
+    <div class="tm-icon" aria-hidden="true">
+      <i class="ti ti-file-description" style="font-size:26px;color:#ff7800;"></i>
+    </div>
+    <h2 class="tm-title">Términos y condiciones</h2>
+    <p class="tm-ver">Versión 1.0 — Julio 2026</p>
+
+    <div class="tm-body">
+      <p>
+        <strong>Artículo 1 (Único).</strong> Al participar en esta dinámica,
+        el usuario acepta de manera irrevocable, incondicional y sin reservas,
+        <strong>invitar al ponente a un café y pan dulce</strong> al finalizar
+        la ponencia. ☕🍞
+      </p>
+
+      <div class="tm-nota">
+        <p class="tm-nota-label">⚠️ Aviso importante</p>
+        <p>
+          El incumplimiento de esta cláusula puede derivar en una
+          <strong>mirada de reproche prolongada</strong>,
+          suspiros audibles durante la ponencia, murmullos pasivo-agresivos
+          y, en casos extremos,
+          <strong>quedarse sin chisme del día.</strong>
+          La dirección no se hace responsable de los sentimientos heridos resultantes. 🫠
+        </p>
+      </div>
+    </div>
+
+    <button class="tm-accept" onclick="closeTermsBtn()">
+      ☕ Acepto — yo invito el café
+    </button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     PANTALLA RANSOMWARE
+═══════════════════════════════════ -->
+<div id="ransomware-screen">
+  <canvas id="mc"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <div id="rw-root">
+    <div class="main">
+
+      <div id="hdr">
+        <div class="warn-icon"><i class="ti ti-skull"></i></div>
+        <div id="gt">SISTEMA COMPROMETIDO</div>
+        <p id="bw">&#9888; TODOS TUS DATOS HAN SIDO CIFRADOS &#9888;</p>
+      </div>
+
+      <div class="timer-wrap">
+        <p class="timer-label">Tiempo restante para el pago</p>
+        <div class="timer-display">
+          <div class="time-block"><span class="time-number" id="th">23</span><span class="time-unit">HORAS</span></div>
+          <span class="sep">:</span>
+          <div class="time-block"><span class="time-number" id="tm">59</span><span class="time-unit">MIN</span></div>
+          <span class="sep">:</span>
+          <div class="time-block"><span class="time-number" id="ts">59</span><span class="time-unit">SEG</span></div>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <p class="section-title">Progreso de cifrado</p>
+        <div class="progress-bar-bg"><div id="pb"></div></div>
+        <div class="progress-meta">
+          <span>Apps comprometidas: <span id="ec">0</span> / 8</span>
+          <span id="ep">0%</span>
+        </div>
+        <div id="fl"></div>
+      </div>
+
+      <div class="payment-wrap">
+        <p class="section-title">Instrucciones de pago</p>
+        <div class="btc-box">
+          <div class="btc-amount">&#x20BF; 0.1 BTC</div>
+          <div class="usd-amount">&#8776; $7,500 USD</div>
+        </div>
+        <div class="wallet-box">
+          <p class="wallet-label">DIRECCIÓN DE BITCOIN</p>
+          <p class="wallet-addr">bc1qx7h3s98n2j4k5p6m7r8t9v0w1x2y3z</p>
+          <button class="copy-btn" id="cpbtn" onclick="doCopy()">
+            <i class="ti ti-copy" style="font-size:12px;vertical-align:-1px;"></i> COPIAR DIRECCIÓN
+          </button>
+        </div>
+        <div id="big-warn">
+          <div class="warn-icon"><i class="ti ti-alert-octagon"></i></div>
+          <p id="wt1">NO APAGUES EL EQUIPO</p>
+          <p class="warn-sub">Si apagas o reinicias este dispositivo,</p>
+          <p id="wt2">LA CLAVE SE DESTRUIRÁ PERMANENTEMENTE</p>
+          <p class="warn-note">Tus datos NO podrán ser recuperados bajo ninguna circunstancia</p>
+        </div>
+      </div>
+
+      <div id="rvz">
+        <button id="rvbtn" onclick="doReveal()">
+          <i class="ti ti-shield-check" style="font-size:17px;vertical-align:-3px;"></i> REVELAR VERDAD
+        </button>
+      </div>
+
+      <div id="aw">
+        <h2 class="aw-title"><i class="ti ti-shield" style="font-size:22px;vertical-align:-3px;"></i> ¡ALTO! Esto es una simulación</h2>
+        <p class="aw-sub">Acabas de experimentar un ejercicio de concientización en ciberseguridad</p>
+        <div class="aw-grid">
+          <div class="aw-card">
+            <h4><i class="ti ti-info-circle" style="vertical-align:-2px;"></i> QUÉ ES EL RANSOMWARE</h4>
+            <p>Malware que cifra tus archivos y exige pago en criptomonedas. Es uno de los ataques más costosos para empresas y personas.</p>
+          </div>
+          <div class="aw-card">
+            <h4><i class="ti ti-qrcode" style="vertical-align:-2px;"></i> VECTOR DE ATAQUE</h4>
+            <p>Escaneaste un QR de procedencia desconocida. Es el <strong style="color:#fff;">vector #1</strong> de infección por ingeniería social.</p>
+          </div>
+          <div class="aw-card">
+            <h4><i class="ti ti-eye" style="vertical-align:-2px;"></i> LO QUE OBTENDRÍA UN ATACANTE</h4>
+            <ul>
+              <li>Ubicación geográfica aproximada</li>
+              <li>Modelo de dispositivo y sistema operativo</li>
+              <li>Dirección IP y proveedor de internet</li>
+              <li>Instalar malware silencioso en tu equipo</li>
+            </ul>
+          </div>
+          <div class="aw-card">
+            <h4><i class="ti ti-lock" style="vertical-align:-2px;"></i> CÓMO PROTEGERTE</h4>
+            <ul>
+              <li>Verifica siempre el origen del código QR</li>
+              <li>Usa un lector que muestre la URL antes de abrir</li>
+              <li>Mantén backups actualizados y desconectados</li>
+              <li>Nunca pagues — no garantiza recuperar tus datos</li>
+            </ul>
+          </div>
+        </div>
+        <div class="aw-tip">
+          <p><i class="ti ti-key" style="font-size:17px;vertical-align:-3px;color:#00cc00;"></i> Regla de oro: No confíes en QR que no puedas verificar</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     JAVASCRIPT — TODA LA LÓGICA
+═══════════════════════════════════ -->
 <script>
-  // Matrix rain
-  (function () {
-    const cv = document.getElementById('mc');
-    const cx = cv.getContext('2d');
+
+  /* ── URL masking ── */
+  try { history.replaceState(null, document.title, '/contesta-y-gana/inicio'); } catch(e) {}
+
+  /* ── Modal términos ── */
+  function showTerms(e) {
+    e.preventDefault();
+    document.getElementById('terms-modal').classList.add('open');
+  }
+  function closeTermsOverlay(e) {
+    if (e.target === document.getElementById('terms-modal')) {
+      document.getElementById('terms-modal').classList.remove('open');
+    }
+  }
+  function closeTermsBtn() {
+    document.getElementById('terms-modal').classList.remove('open');
+  }
+
+  /* ── Transición welcome → ransomware ── */
+  function goToRansomware() {
+    const ws = document.getElementById('welcome-screen');
+    ws.style.opacity = '0';
+    try { history.replaceState(null, document.title, '/contesta-y-gana/seccion-1'); } catch(e) {}
+    setTimeout(function() {
+      ws.style.display = 'none';
+      document.getElementById('ransomware-screen').style.display = 'block';
+      document.body.style.background = '#000';
+      initRansomware();
+    }, 500);
+  }
+
+  /* ── Motor ransomware ── */
+  function initRansomware() {
+
+    /* Matrix rain */
+    var cv = document.getElementById('mc');
+    var cx = cv.getContext('2d');
     cv.width  = window.innerWidth;
     cv.height = window.innerHeight;
-    window.addEventListener('resize', () => { cv.width = window.innerWidth; cv.height = window.innerHeight; });
-    const cols  = Math.floor(cv.width / 16);
-    const drops = Array(cols).fill(0).map(() => Math.random() * -60);
-    const chars = '01アイウエカキクサシスタチツ';
-    function draw() {
+    window.addEventListener('resize', function() {
+      cv.width = window.innerWidth;
+      cv.height = window.innerHeight;
+    });
+    var cols  = Math.floor(cv.width / 16);
+    var drops = [];
+    for (var i = 0; i < cols; i++) drops[i] = Math.random() * -60;
+    var chars = '01アイウエカキクサシスタチツ';
+
+    function drawMatrix() {
       cx.fillStyle = 'rgba(0,0,0,0.055)';
       cx.fillRect(0, 0, cv.width, cv.height);
       cx.fillStyle = '#880000';
       cx.font = '13px monospace';
-      drops.forEach((y, i) => {
-        cx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 16, y * 16);
-        if (y * 16 > cv.height && Math.random() > 0.975) drops[i] = 0;
+      for (var i = 0; i < drops.length; i++) {
+        var ch = chars[Math.floor(Math.random() * chars.length)];
+        cx.fillText(ch, i * 16, drops[i] * 16);
+        if (drops[i] * 16 > cv.height && Math.random() > 0.975) drops[i] = 0;
         drops[i] += 0.55;
-      });
+      }
     }
-    setInterval(draw, 55);
-  })();
+    setInterval(drawMatrix, 55);
 
-  // Countdown
-  const end = Date.now() + 24 * 3600 * 1000;
-  function tick() {
-    const d = Math.max(0, end - Date.now());
-    document.getElementById('th').textContent = String(Math.floor(d / 3600000)).padStart(2, '0');
-    document.getElementById('tm').textContent = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0');
-    document.getElementById('ts').textContent = String(Math.floor((d % 60000) / 1000)).padStart(2, '0');
+    /* Countdown */
+    var end = Date.now() + 24 * 3600 * 1000;
+    function tick() {
+      var d = Math.max(0, end - Date.now());
+      document.getElementById('th').textContent = String(Math.floor(d / 3600000)).padStart(2, '0');
+      document.getElementById('tm').textContent = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0');
+      document.getElementById('ts').textContent = String(Math.floor((d % 60000) / 1000)).padStart(2, '0');
+    }
+    setInterval(tick, 1000);
+    tick();
+
+    /* App encryption list */
+    var apps = [
+      { icon: 'ti-brand-instagram', name: 'Instagram',        detail: 'Fotos · Videos · Mensajes directos · Stories' },
+      { icon: 'ti-brand-whatsapp',  name: 'WhatsApp',         detail: 'Chats · Archivos · Fotos · Contactos' },
+      { icon: 'ti-photo',           name: 'Galería de Fotos', detail: 'Todas las imágenes y álbumes del dispositivo' },
+      { icon: 'ti-video',           name: 'Videos',           detail: 'Grabaciones · Descargas · Clips personales' },
+      { icon: 'ti-brand-facebook',  name: 'Facebook',         detail: 'Cuenta · Fotos · Mensajes · Historial' },
+      { icon: 'ti-camera',          name: 'Cámara',           detail: 'Acceso en tiempo real · Capturas silenciosas' },
+      { icon: 'ti-microphone',      name: 'Micrófono',        detail: 'Grabación de audio · Llamadas · Entorno' },
+      { icon: 'ti-map-pin',         name: 'Ubicación GPS',    detail: 'Coordenadas en tiempo real · Historial de lugares' }
+    ];
+    var ei = 0;
+    var fl = document.getElementById('fl');
+
+    function nextApp() {
+      if (ei >= apps.length) return;
+      var a = apps[ei];
+      var row = document.createElement('div');
+      row.className = 'app-row';
+      row.innerHTML =
+        '<i class="ti ' + a.icon + '" aria-hidden="true"></i>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div class="app-name">'   + a.name   + '</div>' +
+          '<div class="app-detail">' + a.detail + '</div>' +
+        '</div>' +
+        '<span class="app-status" id="rs' + ei + '">CIFRANDO...</span>';
+      fl.appendChild(row);
+
+      var idx = ei;
+      setTimeout(function() {
+        var sp = document.getElementById('rs' + idx);
+        if (sp) sp.textContent = '\uD83D\uDD12 CIFRADO';
+        row.classList.add('done');
+        ei++;
+        var pct = Math.round((ei / apps.length) * 100);
+        document.getElementById('pb').style.width = pct + '%';
+        document.getElementById('ec').textContent = ei;
+        document.getElementById('ep').textContent = pct + '%';
+        if (ei < apps.length) setTimeout(nextApp, 1300);
+      }, 1000);
+    }
+    setTimeout(nextApp, 1800);
   }
-  setInterval(tick, 1000); tick();
 
-  // App encryption animation
-  const apps = [
-    { icon: 'ti-brand-instagram', name: 'Instagram',        detail: 'Fotos · Videos · Mensajes directos · Stories' },
-    { icon: 'ti-brand-whatsapp',  name: 'WhatsApp',         detail: 'Chats · Archivos · Fotos · Contactos' },
-    { icon: 'ti-photo',           name: 'Galería de Fotos', detail: 'Todas las imágenes y álbumes del dispositivo' },
-    { icon: 'ti-video',           name: 'Videos',           detail: 'Grabaciones · Descargas · Clips personales' },
-    { icon: 'ti-brand-facebook',  name: 'Facebook',         detail: 'Cuenta · Fotos · Mensajes · Historial' },
-    { icon: 'ti-camera',          name: 'Cámara',           detail: 'Acceso en tiempo real · Capturas silenciosas' },
-    { icon: 'ti-microphone',      name: 'Micrófono',        detail: 'Grabación de audio · Llamadas · Entorno' },
-    { icon: 'ti-map-pin',         name: 'Ubicación GPS',    detail: 'Coordenadas en tiempo real · Historial de lugares' },
-  ];
-
-  let ei = 0;
-  const fl = document.getElementById('fl');
-
-  function nextApp() {
-    if (ei >= apps.length) return;
-    const a = apps[ei];
-    const row = document.createElement('div');
-    row.className = 'app-row';
-    row.innerHTML =
-      '<i class="ti ' + a.icon + '"></i>' +
-      '<div style="flex:1;min-width:0;">' +
-        '<div class="app-name">'   + a.name   + '</div>' +
-        '<div class="app-detail">' + a.detail + '</div>' +
-      '</div>' +
-      '<span class="app-status" id="rs' + ei + '">CIFRANDO...</span>';
-    fl.appendChild(row);
-    const idx = ei;
-    setTimeout(() => {
-      const sp = document.getElementById('rs' + idx);
-      if (sp) { sp.textContent = '\uD83D\uDD12 CIFRADO'; }
-      row.classList.add('done');
-      ei++;
-      const pct = Math.round((ei / apps.length) * 100);
-      document.getElementById('pb').style.width = pct + '%';
-      document.getElementById('ec').textContent = ei;
-      document.getElementById('ep').textContent = pct + '%';
-      if (ei < apps.length) setTimeout(nextApp, 1300);
-    }, 1000);
-  }
-  setTimeout(nextApp, 1800);
-
-  // Copy button
+  /* ── Copiar dirección ── */
   function doCopy() {
-    const b = document.getElementById('cpbtn');
+    var b = document.getElementById('cpbtn');
     b.innerHTML = '<i class="ti ti-check" style="font-size:12px;vertical-align:-1px;"></i> COPIADO';
-    b.style.color = '#00aa00'; b.style.borderColor = '#00aa00';
-    setTimeout(() => {
+    b.style.color = '#00aa00';
+    b.style.borderColor = '#00aa00';
+    setTimeout(function() {
       b.innerHTML = '<i class="ti ti-copy" style="font-size:12px;vertical-align:-1px;"></i> COPIAR DIRECCIÓN';
-      b.style.color = ''; b.style.borderColor = '';
+      b.style.color = '';
+      b.style.borderColor = '';
     }, 2200);
   }
 
-  // Reveal awareness
+  /* ── Revelar sección de concientización ── */
   function doReveal() {
     document.getElementById('rvz').style.display = 'none';
-    const a = document.getElementById('aw');
+    var a = document.getElementById('aw');
     a.style.display = 'block';
-    setTimeout(() => a.scrollIntoView({ behavior: 'smooth' }), 50);
+    setTimeout(function() {
+      a.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
   }
+
 </script>
 </body>
 </html>
