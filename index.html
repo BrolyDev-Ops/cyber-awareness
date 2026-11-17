@@ -1,545 +1,506 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contesta y Gana — Premios Digitales 2024</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { min-height: 100vh; background: #0d0d0d; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-
-    /* ── WELCOME ── */
-    #welcome-screen {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      padding: 20px; background: radial-gradient(ellipse at top, #1a1a1a 0%, #0d0d0d 70%);
-      transition: opacity 0.5s ease;
-    }
-    .w-card {
-      background: #1a1a1a; border-radius: 20px; border: 1px solid #2a2a2a;
-      box-shadow: 0 0 60px rgba(255,120,0,0.12), 0 8px 48px rgba(0,0,0,0.6);
-      padding: 40px 34px 32px; max-width: 460px; width: 100%; text-align: center;
-    }
-    .w-logo {
-      width: 72px; height: 72px; background: #ff7800; border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 20px; box-shadow: 0 0 24px rgba(255,120,0,0.45);
-    }
-    .w-badge {
-      display: inline-block; background: rgba(255,120,0,0.15);
-      border: 1px solid rgba(255,120,0,0.3); color: #ff9a40;
-      font-size: 10px; font-weight: 700; letter-spacing: 3px;
-      text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 14px;
-    }
-    .w-title { font-size: 1.7em; font-weight: 800; color: #fff; margin-bottom: 4px; line-height: 1.2; }
-    .w-title span { color: #ff7800; }
-    .w-sub { font-size: 0.83em; color: #555; margin-bottom: 26px; }
-
-    .prize-strip { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
-    .prize-item  { flex: 1; background: #111; border: 1px solid #222; border-radius: 12px; padding: 12px 6px; text-align: center; }
-    .prize-item i      { font-size: 22px; color: #ff7800; display: block; margin-bottom: 5px; }
-    .prize-item p      { font-size: 0.7em; color: #888; line-height: 1.3; }
-    .prize-item strong { color: #ccc; font-size: 0.78em; display: block; }
-
-    .w-box { background: #111; border: 1px solid #222; border-radius: 14px; padding: 18px 20px; margin-bottom: 22px; text-align: left; }
-    .w-box p { color: #aaa; font-size: 0.88em; line-height: 1.7; margin-bottom: 12px; }
-    .w-box p:last-child { margin-bottom: 0; }
-    .w-box strong { color: #ff9a40; }
-    .w-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-    .w-chip  { display: flex; align-items: center; gap: 5px; font-size: 0.75em; color: #ff9a40; background: rgba(255,120,0,0.1); border: 1px solid rgba(255,120,0,0.2); border-radius: 20px; padding: 4px 10px; }
-
-    .w-btn {
-      width: 100%; background: #ff7800; color: #000; border: none; border-radius: 12px;
-      padding: 16px; font-size: 1em; font-weight: 800; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(255,120,0,0.35);
-    }
-    .w-btn:hover  { background: #ff9000; box-shadow: 0 4px 28px rgba(255,120,0,0.55); }
-    .w-btn:active { transform: scale(0.98); }
-    .w-tc { margin-top: 14px; }
-    .w-tc a { color: #333; font-size: 0.72em; text-decoration: none; transition: color 0.2s; }
-    .w-tc a:hover { color: #555; }
-
-    /* ── MODAL ── */
-    #terms-modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
-      display: none; align-items: center; justify-content: center; z-index: 999; padding: 20px;
-    }
-    #terms-modal.open { display: flex; }
-    .tm-box {
-      background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 18px;
-      padding: 32px 26px; max-width: 390px; width: 100%; text-align: center;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.8), 0 0 40px rgba(255,120,0,0.1);
-      animation: pop-in 0.28s cubic-bezier(.34,1.56,.64,1);
-    }
-    @keyframes pop-in { from { transform: scale(0.82); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .tm-icon {
-      width: 56px; height: 56px; background: rgba(255,120,0,0.12);
-      border: 1px solid rgba(255,120,0,0.25); border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
-    }
-    .tm-title { font-size: 1.05em; font-weight: 700; color: #fff; margin-bottom: 3px; }
-    .tm-ver   { font-size: 0.72em; color: #444; margin-bottom: 18px; }
-    .tm-body  { background: #111; border: 1px solid #222; border-radius: 10px; padding: 16px; text-align: left; margin-bottom: 8px; }
-    .tm-body p { font-size: 0.85em; color: #aaa; line-height: 1.7; }
-    .tm-body strong { color: #ff9a40; }
-    .tm-nota {
-      background: rgba(255,120,0,0.08); border: 1px solid rgba(255,120,0,0.3);
-      border-left: 4px solid #ff7800; border-radius: 8px;
-      padding: 12px 14px; margin-top: 12px; text-align: left;
-    }
-    .tm-nota-label { font-size: 0.68em; font-weight: 800; color: #ff7800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
-    .tm-nota p { font-size: 0.8em; color: #cc8a00; line-height: 1.6; }
-    .tm-nota strong { color: #ff9a40; }
-    .tm-accept {
-      width: 100%; background: #ff7800; color: #000; border: none; border-radius: 8px;
-      padding: 12px; font-size: 0.9em; font-weight: 800; cursor: pointer;
-      transition: background 0.2s; margin-top: 18px;
-    }
-    .tm-accept:hover { background: #ff9000; }
-
-    /* ── RANSOMWARE ── */
-    #ransomware-screen { display: none; }
-    #mc { position: fixed; top:0; left:0; width:100%; height:100%; opacity:0.13; pointer-events:none; z-index:0; }
-    .scanlines {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);
-      pointer-events: none; z-index: 1;
-    }
-    #rw-root { background: #000; position: relative; min-height: 100vh; font-family: 'Courier New', Courier, monospace; color: #ff0000; }
-    .main { position: relative; z-index: 2; max-width: 880px; margin: 0 auto; padding: 28px 18px 48px; }
-
-    #hdr { text-align:center; padding:32px 20px 24px; border:2px solid #aa0000; border-radius:12px; margin-bottom:22px; background:rgba(255,0,0,0.04); animation:pulse-border 2s infinite; }
-    @keyframes pulse-border { 0%,100%{box-shadow:0 0 12px rgba(180,0,0,0.18);}50%{box-shadow:0 0 35px rgba(200,0,0,0.45);} }
-
-    #gt { font-size:2.2em; font-weight:bold; color:#fff; text-transform:uppercase; letter-spacing:3px; margin-bottom:11px; animation:glitch-skew 4s infinite linear alternate-reverse; }
-    @keyframes glitch-skew { 0%{transform:skew(0deg);}4%{transform:skew(-1deg);color:#ff5555;}8%{transform:skew(.4deg);}92%{transform:skew(0deg);}96%{transform:skew(.8deg);color:#ff7777;}100%{transform:skew(0deg);} }
-
-    #bw { color:#ff4444; font-size:1.05em; letter-spacing:1px; animation:blink 1.5s step-end infinite; }
-    @keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.25;} }
-
-    .timer-wrap { text-align:center; background:#080808; border:1px solid #1c1c1c; border-radius:12px; padding:22px; margin-bottom:18px; }
-    .timer-label { color:#555; font-size:0.72em; letter-spacing:4px; text-transform:uppercase; margin-bottom:14px; }
-    .timer-display { display:flex; justify-content:center; align-items:center; gap:8px; }
-    .time-block { background:#0f0f0f; border:1px solid #aa0000; border-radius:8px; padding:12px 16px; min-width:74px; text-align:center; }
-    .time-number { display:block; font-size:2.7em; font-weight:bold; color:#fff; line-height:1; }
-    .time-unit   { display:block; font-size:0.6em; color:#444; letter-spacing:2px; margin-top:3px; }
-    .sep { font-size:2.3em; font-weight:bold; color:#aa0000; padding-bottom:14px; animation:sep-blink 1s step-end infinite; }
-    @keyframes sep-blink { 0%,100%{opacity:1;}50%{opacity:0;} }
-
-    .section-box { background:#080808; border:1px solid #161616; border-radius:12px; padding:20px; margin-bottom:18px; }
-    .section-title { color:#cc2222; font-size:0.78em; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:7px; }
-    .section-title::before { content:''; display:inline-block; width:3px; height:13px; background:#aa0000; border-radius:2px; }
-
-    .progress-bar-bg { background:#141414; border-radius:4px; height:7px; margin-bottom:9px; overflow:hidden; }
-    #pb { height:100%; background:#cc0000; border-radius:4px; width:0%; transition:width 0.6s ease; }
-    .progress-meta { display:flex; justify-content:space-between; font-size:0.72em; color:#444; margin-bottom:12px; }
-    .progress-meta span { color:#ff3333; }
-
-    .app-row { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid #101010; }
-    .app-row i { font-size:18px; color:#ff6600; min-width:22px; text-align:center; }
-    .app-name   { font-size:0.82em; color:#ff6600; font-weight:bold; }
-    .app-detail { font-size:0.7em; color:#553333; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .app-status { white-space:nowrap; font-size:0.72em; color:#ffaa00; animation:blink 0.35s step-end infinite; margin-left:auto; }
-    .app-row.done i { color:#551111; }
-    .app-row.done .app-name { color:#882222; }
-    .app-row.done .app-status { color:#cc0000; animation:none; }
-
-    .payment-wrap { background:#060606; border:1px solid #181818; border-radius:12px; padding:20px; margin-bottom:18px; }
-    .btc-box { text-align:center; background:#0c0c0c; border-radius:8px; padding:18px; margin-bottom:14px; }
-    .btc-amount { font-size:2.6em; font-weight:bold; color:#f7931a; font-family:monospace; }
-    .usd-amount { color:#444; font-size:0.85em; margin-top:4px; }
-    .wallet-box { background:#0e0e0e; border:1px solid #1e1e1e; border-radius:8px; padding:13px; text-align:center; margin-bottom:14px; }
-    .wallet-label { color:#3a3a3a; font-size:0.68em; letter-spacing:2px; margin-bottom:7px; }
-    .wallet-addr  { color:#00bb00; font-family:monospace; font-size:0.82em; word-break:break-all; }
-    .copy-btn { background:transparent; border:1px solid #2a2a2a; color:#444; padding:6px 13px; border-radius:4px; font-family:monospace; font-size:0.72em; margin-top:9px; cursor:pointer; transition:all 0.2s; }
-    .copy-btn:hover { border-color:#00aa00; color:#00aa00; }
-
-    #big-warn { border:3px solid #cc0000; border-radius:10px; padding:22px 16px; text-align:center; background:rgba(180,0,0,0.08); animation:warn-pulse 1.8s infinite; }
-    @keyframes warn-pulse { 0%,100%{box-shadow:0 0 10px rgba(180,0,0,0.15);}50%{box-shadow:0 0 32px rgba(220,0,0,0.5);} }
-    .warn-icon { font-size:2.8em; line-height:1; margin-bottom:10px; color:#ff2222; }
-    #wt1 { color:#ff2222; font-size:1.65em; font-weight:bold; text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; line-height:1.2; animation:blink 1s step-end infinite; }
-    .warn-sub  { color:#cc2222; font-size:1em; letter-spacing:1px; margin-bottom:6px; }
-    #wt2 { color:#fff; font-size:1.3em; font-weight:bold; letter-spacing:1px; animation:blink 1.2s step-end infinite; }
-    .warn-note { color:#883333; font-size:0.78em; margin-top:10px; letter-spacing:1px; }
-
-    #rvz { text-align:center; margin-bottom:22px; }
-    #rvbtn { background:transparent; border:2px solid #009900; color:#00bb00; padding:13px 38px; font-size:0.95em; font-family:'Courier New',monospace; cursor:pointer; border-radius:6px; letter-spacing:3px; text-transform:uppercase; animation:green-pulse 2.2s infinite; }
-    @keyframes green-pulse { 0%,100%{box-shadow:0 0 8px rgba(0,150,0,0.15);}50%{box-shadow:0 0 22px rgba(0,180,0,0.35);} }
-
-    #aw { display:none; background:rgba(0,35,0,0.5); border:2px solid #005500; border-radius:12px; padding:28px; margin-bottom:28px; animation:fade-in 0.9s ease; }
-    @keyframes fade-in { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
-    .aw-title { color:#00cc00; font-size:1.7em; text-align:center; margin-bottom:5px; }
-    .aw-sub   { text-align:center; color:#444; font-size:0.82em; margin-bottom:22px; }
-    .aw-grid  { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
-    .aw-card  { background:rgba(0,0,0,0.35); border:1px solid #1a3a1a; border-radius:8px; padding:15px; }
-    .aw-card h4 { color:#00aa00; font-size:0.75em; letter-spacing:2px; margin-bottom:9px; }
-    .aw-card p, .aw-card li { color:#999; font-size:0.8em; line-height:1.6; }
-    .aw-card ul { padding-left:14px; }
-    .aw-tip { background:rgba(0,255,0,0.05); border:1px solid #003300; border-radius:8px; padding:14px; text-align:center; }
-    .aw-tip p { color:#fff; font-size:1em; font-weight:bold; }
-
-    @media (max-width: 600px) {
-      .w-card { padding:28px 18px 24px; }
-      .prize-strip { gap:6px; }
-      .prize-item  { padding:10px 4px; }
-      #gt { font-size:1.5em; }
-      .time-number { font-size:2em; }
-      .time-block  { min-width:58px; padding:10px; }
-      .btc-amount  { font-size:1.9em; }
-      #wt1 { font-size:1.2em; }
-      .aw-grid { grid-template-columns:1fr; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quizzario · Únete al juego</title>
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden;background:#111;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#222}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer;border:0}
+/* ---------- marco de navegador simulado ---------- */
+#frame{position:fixed;inset:0;display:flex;flex-direction:column;background:#dee1e6}
+#tabs{height:34px;display:flex;align-items:flex-end;padding:0 10px;gap:6px;flex:none}
+#tab{background:#fff;border-radius:10px 10px 0 0;padding:7px 16px;font-size:13px;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar{height:44px;background:#fff;display:flex;align-items:center;gap:8px;padding:0 10px;flex:none;border-bottom:1px solid #ccc}
+.nb{width:30px;height:30px;border-radius:50%;background:none;color:#555;font-size:16px}
+#addr{flex:1;min-width:0;height:32px;border-radius:16px;background:#eef0f3;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:14px;cursor:pointer}
+#addr .ns{color:#b3261e;font-weight:600;white-space:nowrap}
+#addr .u{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#444}
+#scroller{flex:1;overflow:auto;position:relative;background:linear-gradient(160deg,#2D1B69,#3b1f85 60%,#4b1d7a);scroll-behavior:smooth}
+#page{position:relative;min-height:100%;color:#fff;overflow:hidden}
+/* formas flotantes (hexágono, estrella, gota, rayo) */
+.sh{position:absolute;opacity:.85;animation:fl 9s ease-in-out infinite alternate;pointer-events:none}
+@keyframes fl{to{transform:translateY(-26px) rotate(14deg)}}
+.hex{clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%)}
+.star{clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.drop{clip-path:polygon(50% 0,80% 40%,95% 68%,82% 92%,50% 100%,18% 92%,5% 68%,20% 40%)}
+.bolt{clip-path:polygon(55% 0,15% 55%,45% 55%,35% 100%,85% 40%,55% 40%)}
+.z{position:relative;z-index:2}
+/* menú */
+nav{display:flex;align-items:center;gap:clamp(10px,2vw,28px);padding:14px clamp(12px,3vw,40px);flex-wrap:wrap}
+.logo{font-weight:800;font-size:clamp(22px,2.2vw,32px);letter-spacing:-.5px;display:flex;align-items:center;gap:8px;filter:blur(.55px)}
+.logo i{width:26px;height:26px;background:#16C7B7;display:inline-block}
+nav .lk{font-weight:600;font-size:clamp(15px,1.15vw,19px);padding:8px 4px;min-height:44px;display:flex;align-items:center}
+nav .sp{flex:1}
+.lang,.btn-reg,nav .lk,.logo{white-space:nowrap}
+.lang{background:rgba(255,255,255,.14);color:#fff;border-radius:20px;padding:8px 14px;font-size:15px;min-height:44px}
+.btn-reg{background:#fff;color:#2D1B69;border-radius:12px;padding:0 20px;font-weight:800;min-height:48px;display:flex;align-items:center}
+.banner{background:linear-gradient(90deg,#FF8A1F,#E6359B);text-align:center;padding:12px 16px;font-weight:700;font-size:clamp(15px,1.3vw,20px);color:#fff}
+.banner b{background:#2D1B69;border-radius:8px;padding:2px 10px;font-variant-numeric:tabular-nums}
+main{display:flex;flex-direction:column;align-items:center;gap:22px;padding:clamp(24px,5vh,64px) 16px 40px}
+.card{background:#fff;color:#2D1B69;border-radius:24px;padding:clamp(22px,3vw,40px);width:min(100%,520px);box-shadow:0 24px 60px rgba(10,0,40,.45);display:flex;flex-direction:column;gap:16px}
+.card h1{font-size:clamp(28px,3vw,44px);font-weight:800;letter-spacing:-.5px;text-align:center}
+.card label{font-size:16px;font-weight:700}
+.pin{width:100%;height:56px;border-radius:14px;border:3px solid #d9d3ee;font-size:28px;font-weight:800;text-align:center;letter-spacing:4px;color:#2D1B69;background:#f6f4fc}
+.go{min-height:60px;border-radius:14px;background:#16C7B7;color:#06352f;font-weight:800;font-size:clamp(17px,1.5vw,22px);box-shadow:0 5px 0 #0e9488;transition:transform .15s}
+.go:hover{transform:translateY(-2px)}
+.alt{min-height:52px;border-radius:14px;background:#fff;color:#2D1B69;border:3px solid #2D1B69;font-weight:700;font-size:17px}
+.stats{display:flex;gap:14px 28px;flex-wrap:wrap;justify-content:center;align-items:center;font-weight:700;font-size:clamp(15px,1.2vw,19px)}
+.stats .pl{display:flex;gap:8px;align-items:center}.stats .pl::before{content:"";width:10px;height:10px;border-radius:50%;background:#16C7B7}
+.ver{background:#16C7B7;color:#06352f;border-radius:20px;padding:5px 14px}
+.stars{color:#FFC93C;letter-spacing:2px}
+.shapes{display:flex;gap:14px}.shapes span{width:34px;height:34px}
+footer{background:rgba(10,0,40,.55);padding:26px clamp(14px,4vw,50px) 110px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;font-size:15px;position:relative;z-index:2}
+footer .fl{display:flex;gap:20px;flex-wrap:wrap}
+#cookies{position:sticky;bottom:0;z-index:9;background:#fff;color:#222;display:flex;gap:16px;align-items:center;justify-content:space-between;padding:14px clamp(14px,3vw,40px);font-size:15px;box-shadow:0 -6px 24px rgba(0,0,0,.3);flex-wrap:wrap}
+#cookies button{background:#2D1B69;color:#fff;border-radius:12px;min-height:48px;padding:0 26px;font-weight:700}
+/* cartel QR (solo fase 3) */
+#poster{display:none;position:absolute;left:clamp(10px,3vw,48px);top:clamp(240px,34vh,360px);width:170px;background:#fff;color:#222;padding:12px;border-radius:6px;transform:rotate(-4deg);text-align:center;font-size:13px;font-weight:800;z-index:3;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#poster .qr{display:grid;grid-template-columns:repeat(11,1fr);aspect-ratio:1;margin:8px 0;gap:0}
+#poster .qr i{background:#111}#poster .qr i.o{background:#fff}
+body[data-ph=inspect] #poster{display:block}
+@media(max-width:1100px){#poster{position:relative;left:auto;top:auto;margin:10px auto;transform:none}}
+/* ---------- modo inspección ---------- */
+#insp{display:none}
+body[data-ph=inspect] #insp{display:block}
+body[data-ph=inspect] #page::after{content:"";position:absolute;inset:0;background:rgba(20,10,50,.22);pointer-events:none;z-index:1}
+body[data-ph=inspect] [data-clue],body[data-ph=inspect] [data-decoy]{cursor:help}
+.found{outline:4px solid #2E9E5B;outline-offset:3px;border-radius:6px;animation:pulse 2s ease-out infinite;position:relative;z-index:3}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,158,91,.7)}100%{box-shadow:0 0 0 18px rgba(46,158,91,0)}}
+.hint{outline:4px dashed #FFC93C;outline-offset:3px;animation:pulse2 .9s ease-in-out 3;z-index:3}
+@keyframes pulse2{50%{outline-color:#fff}}
+.shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+#top{display:none;flex:none;background:#fff;color:#2D1B69;padding:8px 12px;gap:10px;align-items:center;border-bottom:1px solid #ddd;font-size:15px;font-weight:600;overflow-x:auto;white-space:nowrap}
+body[data-ph=inspect] #top{display:flex}
+#top>span:first-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+#top .sc{background:#2D1B69;color:#fff;border-radius:10px;padding:6px 12px;font-weight:800;white-space:nowrap}
+#top button.done{background:#2E9E5B!important;color:#fff!important;animation:pulse 1.6s ease-out infinite}
+#top button{background:#eee8fb;color:#2D1B69;border-radius:10px;min-height:44px;padding:0 14px;font-weight:700}
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,-10px);opacity:0;z-index:60;border-radius:14px;padding:14px 24px;font-weight:800;font-size:clamp(17px,1.6vw,24px);color:#fff;transition:.2s;pointer-events:none;text-align:center;max-width:92vw}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#side{position:fixed;right:16px;bottom:16px;width:min(380px,calc(100vw - 32px));max-height:min(72vh,600px);background:#fff;color:#2b2b3a;z-index:55;border-radius:20px;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(10,0,40,.5);font-size:16px;line-height:1.45;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .18s,transform .18s}
+#side.on{opacity:1;transform:none;pointer-events:auto}
+#sh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 10px 10px 18px;border-bottom:1px solid #eee;flex:none}
+#sh span{font-size:13px;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:1px}
+#sx{background:#eee8fb;color:#2D1B69;border-radius:12px;min-height:44px;padding:0 16px;font-weight:800;font-size:15px}
+#sbody{padding:16px 18px;overflow:auto;flex:1}
+#sf{padding:10px 18px 14px;flex:none}
+#sf button{width:100%;min-height:48px;border-radius:12px;background:#2D1B69;color:#fff;font-weight:800;font-size:16px}
+#side .bd{display:inline-block;background:#2E9E5B;color:#fff;border-radius:20px;padding:5px 14px;font-weight:800;margin-bottom:10px}
+#side .bd.n{background:#777}
+#side h2{font-size:21px;margin-bottom:8px;color:#2D1B69;line-height:1.2}
+#side h4{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#8a2a52;margin:14px 0 2px}
+#side .tip{background:#eef9f3;border-radius:10px;padding:10px 12px;margin-top:14px;font-weight:600}
+@media(max-width:700px){#side{right:0;left:0;bottom:0;width:100%;max-height:52vh;border-radius:20px 20px 0 0;transform:translateY(100%)}#top{font-size:13px;gap:8px;padding:6px 8px}#top>span:first-child{display:none}#top .sc{margin-right:auto}#top button{flex:none}#top .sc{padding:4px 10px}#top button{min-height:44px;padding:0 12px}}
+#toast{top:150px!important;bottom:auto!important}
+/* ---------- capa glitch / lluvia ---------- */
+#gl{position:fixed;inset:0;z-index:20;display:none;width:100%;height:100%}
+#gl.on{display:block}
+#scan{position:fixed;inset:0;z-index:21;pointer-events:none;display:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 2px,transparent 2px 4px)}
+#scan.on{display:block}
+#fade{position:fixed;inset:0;z-index:22;background:#050505;opacity:0;pointer-events:none;transition:opacity .9s}
+/* ---------- ransomware ---------- */
+#ransom{position:fixed;inset:0;z-index:30;background:radial-gradient(ellipse at top,#2a0505,#050505 70%);color:#FF2A2A;font-family:ui-monospace,"Courier New",monospace;display:none;overflow:auto;padding:clamp(16px,3vw,48px)}
+body[data-ph=ransom] #ransom,body[data-ph=paid] #ransom{display:block}
+#ransom .in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:26px}
+@media(max-width:850px){#ransom .in{grid-template-columns:1fr}}
+#ransom h1{font-size:clamp(26px,3.6vw,52px);line-height:1.05;text-shadow:2px 0 #0ff3,-2px 0 #f0f3}
+#ransom .sub{color:#ff8a8a;font-size:clamp(15px,1.4vw,20px);margin:10px 0 18px}
+.lock{width:90px;height:100px;margin-bottom:14px}
+.cd{font-size:clamp(36px,5vw,72px);font-weight:700;border:2px solid #FF2A2A;display:inline-block;padding:6px 20px;margin:6px 0 18px;font-variant-numeric:tabular-nums}
+.box{border:1px solid #FF2A2A;padding:14px;background:rgba(255,42,42,.06)}
+#files{height:230px;overflow:hidden;font-size:15px;line-height:1.7;color:#ff6666}
+#files div{white-space:nowrap}
+.amt{font-size:clamp(34px,4vw,56px);font-weight:700;margin:6px 0}
+.wal{word-break:break-all;color:#ffb3b3;background:#1b0000;padding:10px;margin:8px 0 16px;font-size:15px}
+.rb{display:flex;gap:12px;flex-wrap:wrap}
+.rb button{min-height:52px;padding:0 22px;font-family:inherit;font-weight:700;font-size:17px;border:2px solid #FF2A2A;background:none;color:#FF2A2A}
+.rb button.pay{background:#FF2A2A;color:#050505}
+.rb button:hover{filter:brightness(1.25)}
+.prog{height:22px;border:2px solid #FF2A2A;margin-top:14px;display:none}.prog i{display:block;height:100%;width:0;background:#FF2A2A}
+.prog+.pt{display:none;margin-top:6px;font-size:15px}
+.mod{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;padding:16px;overflow:hidden}
+.mod.on{display:flex}
+.mod .bx{background:#fff;color:#2b1b4d;border-radius:22px;padding:clamp(22px,3vw,40px);max-width:560px;width:100%;text-align:center;font-family:system-ui,sans-serif;position:relative;z-index:2;animation:pop .25s ease-out}
+@keyframes pop{from{transform:scale(.92);opacity:0}}
+.mod h2{font-size:clamp(24px,2.6vw,34px);margin-bottom:12px;color:#2E9E5B}
+.mod p{font-size:clamp(17px,1.5vw,21px);line-height:1.45;margin-bottom:18px}
+.mod .big{font-size:clamp(18px,1.7vw,24px);font-weight:700}
+.mod button{min-height:52px;padding:0 24px;border-radius:14px;background:#2D1B69;color:#fff;font-weight:800;font-size:17px}
+.mod .bx.term{background:#0b0303;color:#FF2A2A;border:2px solid #FF2A2A;border-radius:6px;text-align:left;max-width:620px;font-family:ui-monospace,"Courier New",monospace;padding:0;overflow:hidden;box-shadow:0 0 50px rgba(255,42,42,.3)}
+.term .tb{display:flex;justify-content:space-between;align-items:center;background:#FF2A2A;color:#050505;padding:8px 14px;font-weight:700;font-size:15px}
+.term .tb b{font-size:13px;opacity:.8}
+.term .tc{padding:clamp(16px,2.4vw,28px)}
+.term h2{color:#FF2A2A;font-size:clamp(22px,2.4vw,30px);margin-bottom:6px}
+.term .lead{font-size:16px;color:#ff9a9a;margin-bottom:16px}
+.steps{list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.steps li{display:flex;gap:14px;align-items:flex-start;border:1px solid #FF2A2A66;background:rgba(255,42,42,.07);padding:12px 14px;font-size:clamp(15px,1.3vw,18px);line-height:1.4;color:#ffd0d0}
+.steps li i{flex:none;width:32px;height:32px;border:2px solid #FF2A2A;display:grid;place-items:center;font-style:normal;font-weight:700;color:#FF2A2A}
+.steps li b{color:#fff}
+.term button.ok{width:100%;background:#FF2A2A;color:#050505;border-radius:0;font-family:inherit;min-height:54px;font-size:17px}
+.term button.ok:hover{filter:brightness(1.2)}
+#plog{display:none;margin-top:14px;font-size:14px;line-height:1.6;color:#ff9a9a;min-height:112px}
+#plog div::before{content:"> ";color:#FF2A2A}#plog .ok{color:#7dffb0}#plog .ok::before{content:"✔ ";color:#7dffb0}
+.prz{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
+.prz div{background:#f5f1fc;border-radius:16px;padding:16px 10px;font-weight:800;font-size:clamp(16px,1.5vw,20px);line-height:1.3}
+.prz div span{display:block;font-size:44px;margin-bottom:4px}
+.prz+p{margin-bottom:6px!important}
+.cf{position:absolute;top:-20px;width:10px;height:16px;animation:cf linear forwards}
+@keyframes cf{to{transform:translateY(110vh) rotate(720deg)}}
+/* ---------- resumen ---------- */
+#sum{position:fixed;inset:0;z-index:70;background:#38393D;color:#E5DCC5;font-family:"Space Grotesk",system-ui,sans-serif;display:none;overflow:auto;padding:clamp(20px,4vw,64px)}
+body[data-ph=summary] #sum{display:block}
+#sum .in{max-width:1200px;margin:0 auto}
+#sum h1{font-size:clamp(34px,5.4vw,84px);line-height:1;letter-spacing:-1.5px;margin-bottom:22px}
+#sum h1 em{color:#E5DCC5;font-style:normal;background:#A50034;padding:0 .2em}
+.score{display:inline-block;background:#A50034;color:#E5DCC5;padding:8px 20px;font-weight:700;font-size:clamp(18px,1.8vw,26px);margin-bottom:26px}
+.pausa{border:2px solid #E5DCC5;padding:clamp(16px,2vw,28px);margin-bottom:26px;font-size:clamp(17px,1.6vw,24px);line-height:1.5}
+.pausa b{color:#fff}.pausa .l{color:#ff7aa0;font-weight:700}
+#sum ol{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px;list-style:none;padding:0;counter-reset:r;margin-bottom:30px}
+#sum li{counter-increment:r;background:#2c2d31;padding:16px 18px 16px 58px;position:relative;font-size:clamp(16px,1.4vw,20px);line-height:1.4}
+#sum li::before{content:counter(r);position:absolute;left:14px;top:12px;font-size:30px;font-weight:700;color:#A50034;-webkit-text-stroke:0}
+#sum button{background:#A50034;color:#E5DCC5;font-weight:700;font-size:20px;min-height:56px;padding:0 32px;font-family:inherit}
+/* ---------- controles ---------- */
+#ctl{position:fixed;right:8px;top:2px;z-index:100;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.7);color:#fff;border-radius:20px;padding:0 3px 0 12px;font:12px system-ui}
+#ctl button{background:#444;color:#fff;border-radius:14px;min-height:28px;padding:0 10px;margin:1px 0}
+#ctl button[aria-pressed=true]{background:#16C7B7;color:#06352f}
+#ctl span{opacity:.8}
+@media(max-width:700px){#ctl span{display:none}#tab{max-width:55vw}}
+@media(max-width:1000px){nav{gap:4px 14px;padding:10px 14px}nav .sp{display:none}.lang{order:1;margin-left:auto}.btn-reg{order:2}nav .lk{order:3}}
+@media(prefers-reduced-motion:reduce){.sh{animation:none}}
+</style>
 </head>
-<body>
+<body data-ph="p1">
 
-<!-- ══════════════════════════════════
-     PANTALLA DE BIENVENIDA
-═══════════════════════════════════ -->
-<div id="welcome-screen">
-  <div class="w-card">
-
-    <div class="w-logo" aria-hidden="true">
-      <i class="ti ti-gift" style="font-size:34px;color:#000;"></i>
-    </div>
-
-    <div class="w-badge">🏆 ¿Qué tanto sabes?</div>
-
-    <h1 class="w-title">¡Contesta y <span>Gana</span><br>uno de nuestros premios!</h1>
-    <p class="w-sub">Responde el cuestionario y participa al instante</p>
-
-    <div class="prize-strip">
-      <div class="prize-item">
-        <i class="ti ti-device-mobile" aria-hidden="true"></i>
-        <strong>Smartphone</strong>
-        <p>Último modelo</p>
+<!-- ===== Fase 1 / 3: navegador simulado con la página «normal» ===== -->
+<div id="frame">
+  <div id="tabs"><div id="tab">Quizzario · Únete al juego</div></div>
+  <div id="bar">
+    <button class="nb" aria-label="Atrás">←</button><button class="nb" aria-label="Adelante">→</button><button class="nb" aria-label="Recargar">⟳</button>
+    <div id="addr" data-clue="url"><span class="ns" data-clue="nosec">⚠ No seguro</span><span class="u">https://quizzario.premios-login.example/ganador?pin=482913</span></div>
+  </div>
+  <div id="top"><span>Encuentra lo que no concuerda. Haz clic en cualquier elemento sospechoso.</span><span class="sc" id="sc">Pistas: 0 / 10</span><button id="bHint">Pista</button><button id="bAll">Mostrar todas</button><button id="bSum">Finalizar</button></div>
+  <div id="scroller">
+   <div id="page">
+    <span class="sh hex" style="left:6%;top:18%;width:90px;height:90px;background:#16C7B7"></span>
+    <span class="sh star" style="right:7%;top:26%;width:110px;height:110px;background:#FFC93C;animation-delay:-3s"></span>
+    <span class="sh drop" style="left:12%;top:68%;width:80px;height:100px;background:#E6359B;animation-delay:-5s"></span>
+    <span class="sh bolt" style="right:12%;top:62%;width:90px;height:110px;background:#FF8A1F;animation-delay:-2s"></span>
+    <nav class="z">
+      <a class="logo"><i class="hex"></i>Quizzario</a>
+      <a class="lk" data-clue="typo">Descrubir</a><a class="lk">Crear</a><a class="lk">Plataforma</a><a class="lk">Precios</a>
+      <a class="lk" data-clue="typo">Iniciar seción</a>
+      <span class="sp"></span>
+      <a class="lang" data-decoy="lang">🌐 Español ▾</a>
+      <a class="btn-reg" data-decoy="reg">Registrarse</a>
+    </nav>
+    <div class="banner z" data-clue="banner">🎉 ¡Felicidades! Tu equipo ganó una licencia Premium gratis. Quedan <b id="bcd">03:59</b> para reclamarla</div>
+    <div id="poster"><div data-clue="qr" style="display:block">¡GANA PREMIUM!<div class="qr" id="qr"></div>Escanea y reclama<br>tu premio</div></div>
+    <main class="z">
+      <div class="card">
+        <h1>Únete al juego</h1>
+        <div><label for="pin">PIN de juego</label>
+        <input class="pin" id="pin" data-decoy="pin" value="482 913" readonly tabindex="-1" aria-readonly="true"></div>
+        <button class="go" data-clue="btn" type="button">Reclamar premio y entrar</button>
+        <button class="alt" data-clue="corp" type="button">Entrar con cuenta corporativa</button>
+        <div class="shapes"><span class="hex" style="background:#16C7B7"></span><span class="star" style="background:#FFC93C"></span><span class="drop" style="background:#E6359B"></span><span class="bolt" style="background:#FF8A1F"></span></div>
       </div>
-      <div class="prize-item">
-        <i class="ti ti-cash" aria-hidden="true"></i>
-        <strong>$5,000 MXN</strong>
-        <p>En efectivo</p>
+      <div class="stats" data-clue="social">
+        <span class="pl">14,238,991 jugando ahora</span><span class="ver">Verificado ✔</span><span><span class="stars">★★★★★</span> 4.9</span>
       </div>
-      <div class="prize-item">
-        <i class="ti ti-brand-amazon" aria-hidden="true"></i>
-        <strong>Gift Card</strong>
-        <p>$2,000 MXN</p>
-      </div>
-    </div>
-
-    <div class="w-box">
-      <p>¡Hola! Como parte de nuestro panel de usuarios especiales, queremos conocer tu opinión y <strong>premiarte por tu tiempo.</strong></p>
-      <p>Solo responde <strong>5 preguntas rápidas</strong> sobre tu experiencia digital y automáticamente entrarás al sorteo de hoy. Los ganadores son notificados al instante.</p>
-      <div class="w-chips">
-        <span class="w-chip"><i class="ti ti-clock" style="font-size:13px;"></i> Solo 2 minutos</span>
-        <span class="w-chip"><i class="ti ti-lock" style="font-size:13px;"></i> 100% seguro</span>
-        <span class="w-chip"><i class="ti ti-trophy" style="font-size:13px;"></i> Premio garantizado</span>
-      </div>
-    </div>
-
-    <button class="w-btn" onclick="goToRansomware()">
-      <i class="ti ti-arrow-right" style="font-size:18px;"></i>
-      ¡Quiero participar ahora!
-    </button>
-
-    <div class="w-tc">
-      <a href="#" onclick="showTerms(event)">términos y condiciones</a>
-    </div>
-
+    </main>
+    <footer data-clue="footer">
+      <div class="fl"><a>Privacidad</a><a>Términos</a><a>Soporte</a></div>
+      <div>© 2019 Quizzario Inc.</div>
+      <div>soporte.quizzario@mail.example</div>
+    </footer>
+    <div id="cookies" data-clue="cookies"><span>Usamos cookies para mejorar tu experiencia de juego.</span><button type="button">Aceptar todo</button></div>
+   </div>
   </div>
 </div>
 
-
-<!-- ══════════════════════════════════
-     MODAL TÉRMINOS Y CONDICIONES
-═══════════════════════════════════ -->
-<div id="terms-modal" onclick="closeTermsOverlay(event)">
-  <div class="tm-box" onclick="event.stopPropagation()">
-    <div class="tm-icon" aria-hidden="true">
-      <i class="ti ti-file-description" style="font-size:26px;color:#ff7800;"></i>
-    </div>
-    <h2 class="tm-title">Términos y condiciones</h2>
-    <p class="tm-ver">Versión 1.0 — Julio 2026</p>
-
-    <div class="tm-body">
-      <p>
-        <strong>Artículo 1 (Único).</strong> Al participar en esta dinámica,
-        el usuario acepta de manera irrevocable, incondicional y sin reservas,
-        <strong>invitar al ponente a un café y pan dulce</strong> al finalizar
-        la ponencia. ☕🍞
-      </p>
-
-      <div class="tm-nota">
-        <p class="tm-nota-label">⚠️ Aviso importante</p>
-        <p>
-          El incumplimiento de esta cláusula puede derivar en una
-          <strong>mirada de reproche prolongada</strong>,
-          suspiros audibles durante la ponencia, murmullos pasivo-agresivos
-          y, en casos extremos,
-          <strong>quedarse sin chisme del día.</strong>
-          La dirección no se hace responsable de los sentimientos heridos resultantes. 🫠
-        </p>
-      </div>
-    </div>
-
-    <button class="tm-accept" onclick="closeTermsBtn()">
-      ☕ Acepto — yo invito el café
-    </button>
-  </div>
+<!-- inspección -->
+<div id="insp">
+  <div id="toast"></div>
+  <aside id="side" role="dialog" aria-label="Explicación"><div id="sh"><span>Explicación</span><button id="sx" type="button">✕ Cerrar</button></div><div id="sbody"></div><div id="sf"><button id="sn" type="button">Seguir buscando</button></div></aside>
 </div>
 
+<!-- glitch / lluvia -->
+<canvas id="gl"></canvas><div id="scan"></div><div id="fade"></div>
 
-<!-- ══════════════════════════════════
-     PANTALLA RANSOMWARE
-═══════════════════════════════════ -->
-<div id="ransomware-screen">
-  <canvas id="mc"></canvas>
-  <div class="scanlines" aria-hidden="true"></div>
-
-  <div id="rw-root">
-    <div class="main">
-
-      <div id="hdr">
-        <div class="warn-icon"><i class="ti ti-skull"></i></div>
-        <div id="gt">SISTEMA COMPROMETIDO</div>
-        <p id="bw">&#9888; TODOS TUS DATOS HAN SIDO CIFRADOS &#9888;</p>
-      </div>
-
-      <div class="timer-wrap">
-        <p class="timer-label">Tiempo restante para el pago</p>
-        <div class="timer-display">
-          <div class="time-block"><span class="time-number" id="th">23</span><span class="time-unit">HORAS</span></div>
-          <span class="sep">:</span>
-          <div class="time-block"><span class="time-number" id="tm">59</span><span class="time-unit">MIN</span></div>
-          <span class="sep">:</span>
-          <div class="time-block"><span class="time-number" id="ts">59</span><span class="time-unit">SEG</span></div>
-        </div>
-      </div>
-
-      <div class="section-box">
-        <p class="section-title">Progreso de cifrado</p>
-        <div class="progress-bar-bg"><div id="pb"></div></div>
-        <div class="progress-meta">
-          <span>Apps comprometidas: <span id="ec">0</span> / 8</span>
-          <span id="ep">0%</span>
-        </div>
-        <div id="fl"></div>
-      </div>
-
-      <div class="payment-wrap">
-        <p class="section-title">Instrucciones de pago</p>
-        <div class="btc-box">
-          <div class="btc-amount">&#x20BF; 0.1 BTC</div>
-          <div class="usd-amount">&#8776; $7,500 USD</div>
-        </div>
-        <div class="wallet-box">
-          <p class="wallet-label">DIRECCIÓN DE BITCOIN</p>
-          <p class="wallet-addr">bc1qx7h3s98n2j4k5p6m7r8t9v0w1x2y3z</p>
-          <button class="copy-btn" id="cpbtn" onclick="doCopy()">
-            <i class="ti ti-copy" style="font-size:12px;vertical-align:-1px;"></i> COPIAR DIRECCIÓN
-          </button>
-        </div>
-        <div id="big-warn">
-          <div class="warn-icon"><i class="ti ti-alert-octagon"></i></div>
-          <p id="wt1">NO APAGUES EL EQUIPO</p>
-          <p class="warn-sub">Si apagas o reinicias este dispositivo,</p>
-          <p id="wt2">LA CLAVE SE DESTRUIRÁ PERMANENTEMENTE</p>
-          <p class="warn-note">Tus datos NO podrán ser recuperados bajo ninguna circunstancia</p>
-        </div>
-      </div>
-
-      <div id="rvz">
-        <button id="rvbtn" onclick="doReveal()">
-          <i class="ti ti-shield-check" style="font-size:17px;vertical-align:-3px;"></i> REVELAR VERDAD
-        </button>
-      </div>
-
-      <div id="aw">
-        <h2 class="aw-title"><i class="ti ti-shield" style="font-size:22px;vertical-align:-3px;"></i> ¡ALTO! Esto es una simulación</h2>
-        <p class="aw-sub">Acabas de experimentar un ejercicio de concientización en ciberseguridad</p>
-        <div class="aw-grid">
-          <div class="aw-card">
-            <h4><i class="ti ti-info-circle" style="vertical-align:-2px;"></i> QUÉ ES EL RANSOMWARE</h4>
-            <p>Malware que cifra tus archivos y exige pago en criptomonedas. Es uno de los ataques más costosos para empresas y personas.</p>
-          </div>
-          <div class="aw-card">
-            <h4><i class="ti ti-qrcode" style="vertical-align:-2px;"></i> VECTOR DE ATAQUE</h4>
-            <p>Escaneaste un QR de procedencia desconocida. Es el <strong style="color:#fff;">vector #1</strong> de infección por ingeniería social.</p>
-          </div>
-          <div class="aw-card">
-            <h4><i class="ti ti-eye" style="vertical-align:-2px;"></i> LO QUE OBTENDRÍA UN ATACANTE</h4>
-            <ul>
-              <li>Ubicación geográfica aproximada</li>
-              <li>Modelo de dispositivo y sistema operativo</li>
-              <li>Dirección IP y proveedor de internet</li>
-              <li>Instalar malware silencioso en tu equipo</li>
-            </ul>
-          </div>
-          <div class="aw-card">
-            <h4><i class="ti ti-lock" style="vertical-align:-2px;"></i> CÓMO PROTEGERTE</h4>
-            <ul>
-              <li>Verifica siempre el origen del código QR</li>
-              <li>Usa un lector que muestre la URL antes de abrir</li>
-              <li>Mantén backups actualizados y desconectados</li>
-              <li>Nunca pagues — no garantiza recuperar tus datos</li>
-            </ul>
-          </div>
-        </div>
-        <div class="aw-tip">
-          <p><i class="ti ti-key" style="font-size:17px;vertical-align:-3px;color:#00cc00;"></i> Regla de oro: No confíes en QR que no puedas verificar</p>
-        </div>
-      </div>
-
-    </div>
+<!-- ===== Fase 2: ransomware de mentiras ===== -->
+<div id="ransom">
+ <div class="in">
+  <div>
+   <svg class="lock" viewBox="0 0 90 100" fill="none" stroke="#FF2A2A" stroke-width="6"><path d="M22 46V30a23 23 0 0 1 46 0v4"/><rect x="10" y="46" width="70" height="48" fill="#2a0505"/><path d="M45 62l-6 10 8 4-4 10" stroke-width="4"/></svg>
+   <h1>TUS ARCHIVOS HAN SIDO CIFRADOS</h1>
+   <div class="sub">Tu equipo cayó en Quizzario Ransom</div>
+   <div>Tiempo restante:</div><div class="cd" id="rcd">71:59:42</div>
+   <div class="box" id="files"></div>
   </div>
+  <div>
+   <div class="box"><div>Monto del rescate</div><div class="amt">0.5 BTC</div>
+    <div>Pagar con:</div><div class="wal"> Apple Pay · Wallet</div>
+    <div class="rb"><button id="bHow">¿Cómo pago?</button><button class="pay" id="bPay">PAGAR AHORA</button></div>
+    <div id="plog"></div><div class="prog" id="prog"><i></i></div><div class="pt" id="pt">Verificando pago… 0 %</div>
+   </div>
+  </div>
+ </div>
 </div>
+<div class="mod" id="mHow"><div class="bx term"><div class="tb"><span>ayuda.txt</span></div><div class="tc"><h2>¿Cómo pago?</h2><div class="lead">Instrucciones oficiales (casi).</div>
+<ol class="steps"><li><i>1</i><span><b>Respira.</b> Todo va a estar bien.</span></li><li><i>2</i><span>Elige tu método: <b>Apple Pay</b> o <b>Wallet</b>. Da igual, no cobra nada.</span></li><li><i>3</i><span>Nadie te va a pedir bitcoins. El rescate cuesta mucho menos.</span></li><li><i>4</i><span>Pulsa <b>PAGAR AHORA</b> y mira qué pasa.</span></li></ol>
+<button class="ok" id="bHowX">Entendido</button></div></div></div>
+<div class="mod" id="mPaid"><div class="bx"><h2>✔ Pago aceptado</h2><p>El rescate real es…</p><div class="prz"><div><span>☕</span>Un café</div><div><span>🥖</span>Un rol de guayaba</div></div><p class="big">para <span id="nom"></span>.</p><button id="bGo">Descubramos juntos qué falló →</button></div></div>
 
+<!-- ===== Resumen ===== -->
+<div id="sum"><div class="in">
+ <h1>Todo se veía bien. <em>No lo estaba.</em></h1>
+ <div class="score" id="fsc">Pistas encontradas: 0 / 10</div>
+ <div class="pausa"><b>Antes de escanear o entrar, haz P.A.U.S.A.:</b><br><span class="l">P</span>ara 3 segundos · <span class="l">A</span>naliza (URL, canal, petición) · <span class="l">U</span>rgencia = alerta · <span class="l">S</span>olicita verificación por otro canal · <span class="l">A</span>visa si algo no cuadra.</div>
+ <ol>
+  <li>Desconfía de QR de origen desconocido.</li>
+  <li>Lee el dominio real, no el nombre bonito.</li>
+  <li>Premio + prisa = pausa.</li>
+  <li>Nunca uses credenciales del trabajo en sitios externos.</li>
+  <li>El candado y los «verificado» no prueban legitimidad.</li>
+  <li>Si ya caíste, reporta de inmediato: reportar no es confesar, es defender.</li>
+ </ol>
+ <button id="bRst">Reiniciar demo</button>
+</div></div>
 
-<!-- ══════════════════════════════════
-     JAVASCRIPT — TODA LA LÓGICA
-═══════════════════════════════════ -->
+<div id="ctl"><span>Esc/R reinicia · Espacio avanza · F · S · M</span><button id="bSoft" aria-pressed="false">Modo suave</button></div>
+
 <script>
+"use strict";
+/* ===== Configuración ===== */
+const SEGUNDOS_FASE_1 = 8;
+const NOMBRE_PONENTE = "el ponente";
+const MODO_SUAVE = false; // también se activa solo con prefers-reduced-motion
+/* Sin red, sin almacenamiento, sin formularios: todo es visual. */
 
-  /* ── URL masking ── */
-  try { history.replaceState(null, document.title, '/contesta-y-gana/inicio'); } catch(e) {}
+const $ = s => document.querySelector(s), body = document.body;
+let soft = MODO_SUAVE || matchMedia("(prefers-reduced-motion: reduce)").matches;
+let ph = "p1", timers = [], raf = 0, found = new Set(), showScore = true;
+const T = (fn, ms) => timers.push(setTimeout(fn, ms));
+$("#nom").textContent = NOMBRE_PONENTE;
 
-  /* ── Modal términos ── */
-  function showTerms(e) {
-    e.preventDefault();
-    document.getElementById('terms-modal').classList.add('open');
-  }
-  function closeTermsOverlay(e) {
-    if (e.target === document.getElementById('terms-modal')) {
-      document.getElementById('terms-modal').classList.remove('open');
-    }
-  }
-  function closeTermsBtn() {
-    document.getElementById('terms-modal').classList.remove('open');
-  }
+/* ===== Pistas ===== */
+const CLUES = {
+ qr:{t:"Cartel con QR sin origen",q:"Un QR pegado en un cartel que promete un premio.",p:"Un QR puede ocultar cualquier dirección y no sabes quién lo puso.",v:"Pregunta quién lo colocó y entra tú escribiendo la dirección oficial. No escanees lo que no puedas validar.",c:"Origen desconocido + premio = no escanees."},
+ url:{t:"URL: quizzario.premios-login.example",q:"La dirección del sitio en la barra del navegador.",p:"El nombre bonito va al inicio, pero el dominio real es lo que está justo antes de la primera «/», leído de derecha a izquierda: aquí es premios-login.example, no quizzario.",v:"Compárala con el sitio oficial que ya conoces; escríbelo tú o usa tu marcador.",c:"Lee el dominio real, no el nombre bonito."},
+ nosec:{t:"«No seguro» / sin candado",q:"El navegador avisa que la conexión no está cifrada.",p:"Lo que escribas puede viajar sin protección.",v:"Revisa el indicador junto a la URL. Ojo: el candado no garantiza que el sitio sea legítimo (los delincuentes también usan HTTPS), pero su ausencia es una alerta más.",c:"Candado no es sinónimo de confianza; su ausencia sí es señal."},
+ banner:{t:"Banner «¡Ganaste Premium gratis!» con cuenta regresiva",q:"Un premio inesperado con tiempo límite.",p:"Premio y urgencia son dos palancas clásicas de ingeniería social para que actúes sin pensar.",v:"Si no participaste en nada, no pudiste ganar. Consulta el sitio oficial por tu cuenta.",c:"Si te presionan para actuar rápido, es cuando debes pausar."},
+ btn:{t:"Botón «Reclamar premio y entrar»",q:"El botón principal del formulario.",p:"Es incongruente: un juego legítimo dice «Unirse» o «Entrar». «Reclamar premio» es un anzuelo.",v:"Fíjate si el texto de los botones corresponde a lo que la plataforma hace de verdad.",c:"Si el botón promete algo extra, desconfía."},
+ corp:{t:"«Entrar con cuenta corporativa»",q:"Un acceso con las credenciales de tu trabajo en un sitio de entretenimiento.",p:"Es la jugada típica para robar accesos corporativos.",v:"Si necesitas acceso, entra por el portal oficial de tu empresa.",c:"Nunca uses credenciales del trabajo en sitios externos."},
+ typo:{t:"Faltas de ortografía en el menú",q:"«Descrubir» e «Iniciar seción».",p:"Es descuido de quien copia el sitio. Hoy la IA puede escribir perfecto, así que un error sigue siendo señal, pero la ausencia de errores no prueba legitimidad.",v:"Lee con calma menús y botones; compáralos con el sitio oficial.",c:"Un error es alerta; un texto perfecto no es garantía."},
+ footer:{t:"Pie de página descuidado",q:"«© 2019», enlaces que no llevan a nada y soporte con dominio extraño (mail.example).",p:"Una empresa real mantiene su información actualizada y usa su propio dominio.",v:"Haz clic en los enlaces del pie y revisa que el correo use el dominio oficial.",c:"Los detalles aburridos también delatan."},
+ social:{t:"Contador fijo, «Verificado ✔» y reseñas perfectas",q:"14,238,991 jugando ahora, insignia y ★★★★★ 4.9.",p:"Es prueba social falsa: cualquiera puede escribir insignias y cifras. No son una verificación.",v:"Busca reseñas en fuentes independientes, no en la propia página.",c:"Una insignia que pone la propia página no verifica nada."},
+ cookies:{t:"Cookies sin opción de rechazar y PIN prellenado",q:"Solo existe «Aceptar todo», y el PIN ya viene escrito.",p:"Te empujan a decidir rápido y sin opciones. Un juego real te da el PIN en vivo; no llega ya llenado por un QR.",v:"Desconfía si no hay manera de rechazar o configurar. Pide el PIN al anfitrión del juego.",c:"Sin opciones y con prisa: pausa."}
+};
+const DECOYS = {
+ pin:["El campo PIN","Los juegos en vivo sí usan un PIN para entrar. Lo raro no es el campo, sino que venga ya llenado (eso se revisa en otra pista)."],
+ lang:["El selector de idioma","Casi todas las plataformas lo incluyen. No dice nada sobre si el sitio es legítimo."],
+ reg:["El botón «Registrarse»","Existe en muchas plataformas. Lo importante es el dominio donde te registras."]
+};
+const ORDER = Object.keys(CLUES);
+const PAGE_EL = id => document.querySelector(`[data-clue="${id}"]`);
 
-  /* ── Transición welcome → ransomware ── */
-  function goToRansomware() {
-    const ws = document.getElementById('welcome-screen');
-    ws.style.opacity = '0';
-    try { history.replaceState(null, document.title, '/contesta-y-gana/seccion-1'); } catch(e) {}
-    setTimeout(function() {
-      ws.style.display = 'none';
-      document.getElementById('ransomware-screen').style.display = 'block';
-      document.body.style.background = '#000';
-      initRansomware();
-    }, 500);
-  }
+/* QR decorativo (no es un código real y no se puede escanear) */
+(()=>{let s=7,h="";const r=()=>(s=(s*16807)%2147483647)/2147483647;
+ for(let y=0;y<11;y++)for(let x=0;x<11;x++){const f=(x<3&&y<3)||(x>7&&y<3)||(x<3&&y>7);h+=`<i class="${(f||r()>.5)?"":"o"}"></i>`}
+ $("#qr").innerHTML=h})();
 
-  /* ── Motor ransomware ── */
-  function initRansomware() {
+/* ===== Cuentas regresivas ===== */
+let bsec = 239, rsec = 71*3600+59*60+42;
+const p2 = n => String(n).padStart(2,"0");
+setInterval(()=>{
+ if(ph==="p1"||ph==="inspect"){bsec=bsec>0?bsec-1:239;$("#bcd").textContent=p2(bsec/60|0)+":"+p2(bsec%60)}
+ if(ph==="ransom"||ph==="paid"){rsec--;$("#rcd").textContent=p2(rsec/3600|0)+":"+p2(rsec/60%60|0)+":"+p2(rsec%60)}
+},1000);
 
-    /* Matrix rain */
-    var cv = document.getElementById('mc');
-    var cx = cv.getContext('2d');
-    cv.width  = window.innerWidth;
-    cv.height = window.innerHeight;
-    window.addEventListener('resize', function() {
-      cv.width = window.innerWidth;
-      cv.height = window.innerHeight;
-    });
-    var cols  = Math.floor(cv.width / 16);
-    var drops = [];
-    for (var i = 0; i < cols; i++) drops[i] = Math.random() * -60;
-    var chars = '01アイウエカキクサシスタチツ';
+/* ===== Flujo de fases ===== */
+function go(n){
+ ph=n;body.dataset.ph=n;
+ const gl=$("#gl");
+ if(n!=="glitch"&&n!=="rain"){gl.classList.remove("on");$("#scan").classList.remove("on");cancelAnimationFrame(raf)}
+}
+function reset(){
+ timers.forEach(clearTimeout);timers=[];
+ found.clear();document.querySelectorAll(".found,.hint").forEach(e=>e.classList.remove("found","hint"));
+ closeSide();updScore();rsec=71*3600+59*60+42;
+ $("#mHow").classList.remove("on");$("#mPaid").classList.remove("on");
+ $("#prog").style.display="none";$("#pt").style.display="none";$("#plog").style.display="none";$("#plog").innerHTML="";$("#prog").firstChild.style.width=0;$("#bPay").disabled=false;$("#bPay").textContent="PAGAR AHORA";
+ $("#fade").style.opacity=0;$("#scroller").scrollTop=0;
+ go("p1");T(startGlitch,SEGUNDOS_FASE_1*1000);
+}
+function startGlitch(){
+ if(ph!=="p1")return;
+ timers.forEach(clearTimeout);timers=[];
+ go("glitch");const gl=$("#gl");gl.classList.add("on");
+ if(!soft)$("#scan").classList.add("on");
+ sizeGL();const t0=performance.now();
+ const D=1200;
+ const loop=now=>{
+  const t=Math.min(1,(now-t0)/D);
+  drawGlitch(t);
+  if(t<1&&ph==="glitch")raf=requestAnimationFrame(loop);else if(ph==="glitch")startRain();
+ };
+ raf=requestAnimationFrame(loop);
+}
+function startRain(){
+ go("rain");$("#gl").classList.add("on");
+ if(!soft)$("#scan").classList.add("on");
+ initRain();const t0=performance.now();let last=0;
+ const step=soft?1000/18:1000/30;
+ const loop=now=>{
+  if(ph!=="rain")return;
+  if(now-last>=step){last=now;drawRain()}
+  if(now-t0>3000)return toRansom();
+  raf=requestAnimationFrame(loop);
+ };
+ raf=requestAnimationFrame(loop);
+}
+function toRansom(){
+ go("ransom");
+ const f=$("#files");f.innerHTML="";
+ const names=["reportes.xlsx","clientes.csv","nomina_oct.pdf","contratos_2026.docx","fotos_equipo.zip","presupuesto.xlsx","respaldo_final.bak","notas_reunion.txt","factura_0412.pdf","proyecto_x.pptx","contrasenas.txt","firma_digital.png"];
+ let i=0;const add=()=>{if(ph!=="ransom"&&ph!=="paid")return;
+  const d=document.createElement("div");d.textContent="🔒 "+names[i%names.length].replace(/(\.\w+)$/,i>=names.length?"_"+(i-names.length+2)+"$1":"$1")+"  ........ CIFRADO";
+  f.appendChild(d);while(f.children.length>9)f.firstChild.remove();i++;T(add,380)};
+ add();
+}
+/* ---- canvas ---- */
+const cv=$("#gl"),cx=cv.getContext("2d");
+let W=0,H=0;
+function sizeGL(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+addEventListener("resize",()=>{if(cv.classList.contains("on"))sizeGL()});
+const sc=document.createElement("canvas"),sx=sc.getContext("2d");
+/* escena simplificada de la página, usada para el pixelado (no se lee el DOM) */
+function scene(c,w,h){
+ const g=c.createLinearGradient(0,0,w,h);g.addColorStop(0,"#2D1B69");g.addColorStop(1,"#4b1d7a");c.fillStyle=g;c.fillRect(0,0,w,h);
+ c.fillStyle="#dee1e6";c.fillRect(0,0,w,h*.1);
+ c.fillStyle="#FF8A1F";c.fillRect(0,h*.2,w*.5,h*.06);c.fillStyle="#E6359B";c.fillRect(w*.5,h*.2,w*.5,h*.06);
+ c.fillStyle="#fff";c.fillRect(w*.33,h*.32,w*.34,h*.5);
+ c.fillStyle="#f0ecfa";c.fillRect(w*.36,h*.45,w*.28,h*.08);
+ c.fillStyle="#16C7B7";c.fillRect(w*.36,h*.58,w*.28,h*.08);
+ c.fillStyle="#2D1B69";c.fillRect(w*.36,h*.69,w*.28,h*.06);
+ c.fillStyle="#FFC93C";c.fillRect(w*.8,h*.35,w*.06,h*.1);c.fillStyle="#16C7B7";c.fillRect(w*.1,h*.4,w*.05,h*.08);
+ c.fillStyle="#fff";c.fillRect(0,h*.93,w,h*.07);
+}
+let slices=[],sliceT=0;
+function drawGlitch(t){
+ if(soft){cv.style.opacity=t;cx.fillStyle="#050505";cx.fillRect(0,0,W,H);return}
+ cv.style.opacity=Math.min(1,t*3);
+ const bs=Math.round(4+Math.pow(t,1.6)*Math.max(W,H)/9);
+ const w=Math.max(2,Math.ceil(W/bs)),h=Math.max(2,Math.ceil(H/bs));
+ sc.width=w;sc.height=h;scene(sx,w,h);
+ cx.imageSmoothingEnabled=false;cx.drawImage(sc,0,0,w,h,0,0,W,H);
+ cx.fillStyle=`rgba(255,42,42,${t*.35})`;cx.fillRect(0,0,W,H);
+ cx.fillStyle=`rgba(5,5,5,${Math.max(0,t-.6)*2.2})`;cx.fillRect(0,0,W,H);
+ const now=performance.now();
+ if(now-sliceT>340){sliceT=now;slices=Array.from({length:5},()=>({y:Math.random()*H,h:20+Math.random()*60,dx:(Math.random()-.5)*W*.12*(.3+t)}))}
+ slices.forEach(s=>cx.drawImage(cv,0,s.y,W,s.h,s.dx,s.y,W,s.h));
+}
+/* lluvia de dígitos */
+let cols=[],fs=18;
+function initRain(){
+ sizeGL();cv.style.opacity=1;fs=soft?26:18;
+ cols=Array.from({length:Math.ceil(W/fs/(soft?1.6:1))},(_,i)=>({x:i*fs*(soft?1.6:1),y:Math.random()*-H/fs}));
+ cx.fillStyle="#050505";cx.fillRect(0,0,W,H);
+}
+function drawRain(){
+ cx.fillStyle=soft?"rgba(5,5,5,.22)":"rgba(5,5,5,.14)";cx.fillRect(0,0,W,H);
+ cx.font=fs+"px ui-monospace,'Courier New',monospace";
+ cols.forEach(c=>{
+  cx.fillStyle="#FF2A2A";cx.fillText((Math.random()*10)|0,c.x,c.y*fs);
+  if(c.y*fs>H&&Math.random()>.975)c.y=0;c.y+=soft?.5:1;
+ });
+}
 
-    function drawMatrix() {
-      cx.fillStyle = 'rgba(0,0,0,0.055)';
-      cx.fillRect(0, 0, cv.width, cv.height);
-      cx.fillStyle = '#880000';
-      cx.font = '13px monospace';
-      for (var i = 0; i < drops.length; i++) {
-        var ch = chars[Math.floor(Math.random() * chars.length)];
-        cx.fillText(ch, i * 16, drops[i] * 16);
-        if (drops[i] * 16 > cv.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i] += 0.55;
-      }
-    }
-    setInterval(drawMatrix, 55);
+/* ===== Ransomware: pagar ===== */
+$("#bHow").onclick=()=>$("#mHow").classList.add("on");
+$("#bHowX").onclick=()=>$("#mHow").classList.remove("on");
+$("#bPay").onclick=function(){
+ if(ph!=="ransom")return;this.disabled=true;this.textContent="PROCESANDO…";
+ const p=$("#prog"),i=p.firstChild,t=$("#pt"),L=$("#plog");p.style.display="block";t.style.display="block";L.style.display="block";L.innerHTML="";
+ const logs=[[0,"Conectando con la red…"],[20,"Abriendo Wallet…"],[40,"Apple Pay: método aceptado."],[60,"Comisión calculada: 1 café + 1 rol de guayaba."],[80,"Confirmando con el ponente…"],[100,"Pago verificado.","ok"]];
+ let v=0,k=0;const iv=setInterval(()=>{v+=4;i.style.width=v+"%";t.textContent="Verificando pago… "+v+" %";
+  while(k<logs.length&&v>=logs[k][0]){const d=document.createElement("div");if(logs[k][2])d.className="ok";d.textContent=logs[k][1];L.appendChild(d);k++}
+  if(v>=100){clearInterval(iv);T(paid,500)}},110);
+ timers.push(iv);
+};
+function paid(){
+ go("paid");$("#mPaid").classList.add("on");
+ const m=$("#mPaid"),cols=["#16C7B7","#FF8A1F","#E6359B","#FFC93C","#fff"];
+ for(let k=0;k<(soft?18:60);k++){const e=document.createElement("i");e.className="cf";
+  e.style.cssText=`left:${Math.random()*100}%;background:${cols[k%5]};animation-duration:${2.5+Math.random()*2.5}s;animation-delay:${Math.random()*.8}s`;
+  m.appendChild(e);setTimeout(()=>e.remove(),6500)}
+}
+$("#bGo").onclick=()=>{$("#mPaid").classList.remove("on");go("inspect");updScore();T(()=>showToast("Haz clic en lo que no concuerde","#2D1B69"),300)};
 
-    /* Countdown */
-    var end = Date.now() + 24 * 3600 * 1000;
-    function tick() {
-      var d = Math.max(0, end - Date.now());
-      document.getElementById('th').textContent = String(Math.floor(d / 3600000)).padStart(2, '0');
-      document.getElementById('tm').textContent = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0');
-      document.getElementById('ts').textContent = String(Math.floor((d % 60000) / 1000)).padStart(2, '0');
-    }
-    setInterval(tick, 1000);
-    tick();
+/* ===== Inspección ===== */
+let toastT=0;
+function showToast(txt,bg){const t=$("#toast");t.textContent=txt;t.style.background=bg;t.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("on"),2200)}
+function updScore(){const all=found.size===10;$("#bSum").classList.toggle("done",all);$("#bSum").textContent=all?"Finalizar →":"Finalizar";const sn=$("#sn");sn.textContent=all?"Finalizar →":"Seguir buscando";sn.dataset.fin=all?1:"";$("#sc").textContent=`Pistas: ${found.size} / 10`;$("#fsc").textContent=`Pistas encontradas: ${found.size} / 10`;$("#top").style.display=showScore?"":"none"}
+function openSide(h){$("#sbody").innerHTML=h;$("#side").classList.add("on")}
+function closeSide(){$("#side").classList.remove("on")}
+$("#sx").onclick=closeSide;$("#sn").onclick=()=>{$("#sn").dataset.fin?toSummary():closeSide()};
+function mark(id){
+ document.querySelectorAll(`[data-clue="${id}"]`).forEach(e=>e.classList.add("found"));
+ if(id==="typo")document.querySelectorAll('[data-clue="typo"]').forEach(e=>e.classList.add("found"));
+ found.add(id);updScore();
+}
+function reveal(id,fromClick){
+ const c=CLUES[id];mark(id);
+ if(fromClick){showToast(found.size===10?"✓ Correcto · ¡Las 10 pistas! Pulsa Finalizar":"✓ Correcto","#2E9E5B")}
+ openSide(`<span class="bd">✓ Correcto</span><h2>${c.t}</h2><h4>Qué es</h4>${c.q}<h4>Por qué es peligroso</h4>${c.p}<h4>Cómo verificarlo</h4>${c.v}<div class="tip">💡 ${c.c}</div>`);
 
-    /* App encryption list */
-    var apps = [
-      { icon: 'ti-brand-instagram', name: 'Instagram',        detail: 'Fotos · Videos · Mensajes directos · Stories' },
-      { icon: 'ti-brand-whatsapp',  name: 'WhatsApp',         detail: 'Chats · Archivos · Fotos · Contactos' },
-      { icon: 'ti-photo',           name: 'Galería de Fotos', detail: 'Todas las imágenes y álbumes del dispositivo' },
-      { icon: 'ti-video',           name: 'Videos',           detail: 'Grabaciones · Descargas · Clips personales' },
-      { icon: 'ti-brand-facebook',  name: 'Facebook',         detail: 'Cuenta · Fotos · Mensajes · Historial' },
-      { icon: 'ti-camera',          name: 'Cámara',           detail: 'Acceso en tiempo real · Capturas silenciosas' },
-      { icon: 'ti-microphone',      name: 'Micrófono',        detail: 'Grabación de audio · Llamadas · Entorno' },
-      { icon: 'ti-map-pin',         name: 'Ubicación GPS',    detail: 'Coordenadas en tiempo real · Historial de lugares' }
-    ];
-    var ei = 0;
-    var fl = document.getElementById('fl');
+}
+$("#frame").addEventListener("click",e=>{
+ if(ph!=="inspect")return;
+ const cl=e.target.closest("[data-clue]"),dc=e.target.closest("[data-decoy]");
+ if(cl&&!(dc&&dc.contains(cl)&&!cl.contains(dc))){reveal(cl.dataset.clue,true);return}
+ if(dc){const d=DECOYS[dc.dataset.decoy];showToast("Ese elemento es normal: en plataformas reales también existe","#555");
+  openSide(`<span class="bd n">Elemento normal</span><h2>${d[0]}</h2>${d[1]}`);return}
+ const t=e.target.closest("nav,.card,main,footer,.banner,#bar")||e.target;t.classList.remove("shake");void t.offsetWidth;t.classList.add("shake");
+ closeSide();showToast("Sigue buscando","#2D1B69");
+});
+$("#bHint").onclick=()=>{
+ const id=ORDER.find(k=>!found.has(k));if(!id)return;
+ const el=PAGE_EL(id),sc=$("#scroller");
+ if(sc.contains(el)){const r=el.getBoundingClientRect(),s=sc.getBoundingClientRect();sc.scrollTo({top:sc.scrollTop+r.top-s.top-sc.clientHeight/3})}
+ document.querySelectorAll('[data-clue="'+id+'"]').forEach(e=>{e.classList.add("hint");setTimeout(()=>e.classList.remove("hint"),3000)});
+};
+$("#bAll").onclick=()=>{ORDER.forEach(mark);showToast("Todas las pistas marcadas. Pulsa Finalizar","#2E9E5B")};
+$("#bSum").onclick=()=>toSummary();
+function toSummary(){closeSide();updScore();go("summary")}
+$("#bRst").onclick=reset;
 
-    function nextApp() {
-      if (ei >= apps.length) return;
-      var a = apps[ei];
-      var row = document.createElement('div');
-      row.className = 'app-row';
-      row.innerHTML =
-        '<i class="ti ' + a.icon + '" aria-hidden="true"></i>' +
-        '<div style="flex:1;min-width:0;">' +
-          '<div class="app-name">'   + a.name   + '</div>' +
-          '<div class="app-detail">' + a.detail + '</div>' +
-        '</div>' +
-        '<span class="app-status" id="rs' + ei + '">CIFRANDO...</span>';
-      fl.appendChild(row);
-
-      var idx = ei;
-      setTimeout(function() {
-        var sp = document.getElementById('rs' + idx);
-        if (sp) sp.textContent = '\uD83D\uDD12 CIFRADO';
-        row.classList.add('done');
-        ei++;
-        var pct = Math.round((ei / apps.length) * 100);
-        document.getElementById('pb').style.width = pct + '%';
-        document.getElementById('ec').textContent = ei;
-        document.getElementById('ep').textContent = pct + '%';
-        if (ei < apps.length) setTimeout(nextApp, 1300);
-      }, 1000);
-    }
-    setTimeout(nextApp, 1800);
-  }
-
-  /* ── Copiar dirección ── */
-  function doCopy() {
-    var b = document.getElementById('cpbtn');
-    b.innerHTML = '<i class="ti ti-check" style="font-size:12px;vertical-align:-1px;"></i> COPIADO';
-    b.style.color = '#00aa00';
-    b.style.borderColor = '#00aa00';
-    setTimeout(function() {
-      b.innerHTML = '<i class="ti ti-copy" style="font-size:12px;vertical-align:-1px;"></i> COPIAR DIRECCIÓN';
-      b.style.color = '';
-      b.style.borderColor = '';
-    }, 2200);
-  }
-
-  /* ── Revelar sección de concientización ── */
-  function doReveal() {
-    document.getElementById('rvz').style.display = 'none';
-    var a = document.getElementById('aw');
-    a.style.display = 'block';
-    setTimeout(function() {
-      a.scrollIntoView({ behavior: 'smooth' });
-    }, 50);
-  }
-
+/* Fase 1: un clic en cualquier botón o enlace adelanta la caída */
+$("#frame").addEventListener("click",e=>{if(ph==="p1"&&e.target.closest("button,a,input"))startGlitch()});
+/* ===== Teclado y controles ===== */
+function advance(){
+ if(ph==="p1")startGlitch();
+ else if(ph==="glitch"||ph==="rain"){cancelAnimationFrame(raf);toRansom()}
+ else if(ph==="ransom")$("#bPay").click();
+ else if(ph==="paid")$("#bGo").click();
+ else if(ph==="inspect")toSummary();
+ else if(ph==="summary")reset();
+}
+function setSoft(v){soft=v;$("#bSoft").setAttribute("aria-pressed",v)}
+$("#bSoft").onclick=e=>{setSoft(!soft);e.target.blur()};
+addEventListener("keydown",e=>{
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ const k=e.key.toLowerCase();
+ if(k==="escape"||k==="r")reset();
+ else if(k===" "||k==="arrowright"){e.preventDefault();advance()}
+ else if(k==="f"){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
+ else if(k==="s")setSoft(!soft);
+ else if(k==="m"){showScore=!showScore;updScore()}
+});
+setSoft(soft);reset();
 </script>
 </body>
 </html>
