@@ -275,7 +275,7 @@ body[data-ph=summary] #sum{display:block}
 <script>
 "use strict";
 /* ===== Configuración ===== */
-const SEGUNDOS_FASE_1 = 8;
+const SEGUNDOS_FASE_1 = 0; // 0 = espera clic en un botón; >0 = cae solo tras esos segundos
 const NOMBRE_PONENTE = "el ponente";
 const MODO_SUAVE = false; // también se activa solo con prefers-reduced-motion
 /* Sin red, sin almacenamiento, sin formularios: todo es visual. */
@@ -333,7 +333,7 @@ function reset(){
  $("#mHow").classList.remove("on");$("#mPaid").classList.remove("on");
  $("#prog").style.display="none";$("#pt").style.display="none";$("#plog").style.display="none";$("#plog").innerHTML="";$("#prog").firstChild.style.width=0;$("#bPay").disabled=false;$("#bPay").textContent="PAGAR AHORA";
  $("#fade").style.opacity=0;$("#scroller").scrollTop=0;
- go("p1");T(startGlitch,SEGUNDOS_FASE_1*1000);
+ go("p1");if(SEGUNDOS_FASE_1>0)T(startGlitch,SEGUNDOS_FASE_1*1000);
 }
 function startGlitch(){
  if(ph!=="p1")return;
